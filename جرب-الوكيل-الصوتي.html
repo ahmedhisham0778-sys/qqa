@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الوكيل الصوتي العربي — تجربة</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background: #0f1720; color: #e8eef5;
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .wrap { width: 100%; max-width: 900px; display: grid; grid-template-columns: 1fr 320px; gap: 16px; }
+  @media (max-width: 780px) { .wrap { grid-template-columns: 1fr; } }
+
+  .card { background: #16202b; border: 1px solid #24313f; border-radius: 14px; overflow: hidden; }
+
+  .head { padding: 14px 18px; background: #1b2836; border-bottom: 1px solid #24313f; }
+  .head h1 { font-size: 16px; font-weight: 600; }
+  .head p { font-size: 12px; color: #8fa3b8; margin-top: 3px; }
+
+  #chat { height: 460px; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 10px; }
+  .msg { max-width: 78%; padding: 10px 14px; border-radius: 14px; font-size: 14.5px; line-height: 1.6; white-space: pre-wrap; }
+  .bot  { background: #223243; align-self: flex-start; border-bottom-right-radius: 4px; }
+  .user { background: #2d6cdf; align-self: flex-end; border-bottom-left-radius: 4px; }
+  .sys  { align-self: center; font-size: 12px; color: #7d8fa3; background: none; padding: 4px; }
+
+  .bar { display: flex; gap: 8px; padding: 12px; border-top: 1px solid #24313f; background: #131d27; }
+  input {
+    flex: 1; padding: 12px 14px; border-radius: 10px; border: 1px solid #2c3b4c;
+    background: #0f1720; color: #e8eef5; font-size: 15px; font-family: inherit;
+  }
+  input:focus { outline: none; border-color: #2d6cdf; }
+  button {
+    padding: 12px 20px; border: 0; border-radius: 10px; background: #2d6cdf;
+    color: #fff; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit;
+  }
+  button:hover { background: #2559bd; }
+  button.ghost { background: #24313f; }
+  button.ghost:hover { background: #2c3b4c; }
+
+  .side { padding: 16px; }
+  .side h2 { font-size: 13px; color: #8fa3b8; margin-bottom: 10px; font-weight: 600; }
+  .wa {
+    background: #0b141a; border: 1px solid #1f2c38; border-radius: 10px; padding: 14px;
+    font-size: 13px; line-height: 1.85; white-space: pre-wrap; color: #d6e2ee; min-height: 150px;
+  }
+  .wa .empty { color: #5d6f82; font-style: italic; }
+
+  .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+  .chip {
+    background: #1e2b39; border: 1px solid #2c3b4c; color: #a8bccf;
+    padding: 6px 11px; border-radius: 20px; font-size: 12.5px; cursor: pointer;
+  }
+  .chip:hover { background: #2a3a4b; color: #e8eef5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="card">
+    <div class="head">
+      <h1>📞 عيادة الابتسامة — الرد الآلي</h1>
+      <p>اكتب زي ما المريض بيتكلم في التليفون</p>
+    </div>
+    <div id="chat"></div>
+    <div class="bar">
+      <input id="inp" placeholder="اكتب هنا… مثلاً: أبغى موعد بكرة المسا" autocomplete="off">
+      <button onclick="send()">إرسال</button>
+      <button class="ghost" onclick="reset()">↺</button>
+    </div>
+  </div>
+
+  <div class="card side">
+    <h2>📱 اللي بيوصل واتساب العيادة</h2>
+    <div class="wa" id="wa"><span class="empty">هيظهر هنا بعد ما المكالمة تخلص…</span></div>
+    <h2 style="margin-top:18px">جرّب دي</h2>
+    <div class="chips">
+      <span class="chip" onclick="quick(this)">أبغى موعد</span>
+      <span class="chip" onclick="quick(this)">كم سعر التبييض؟</span>
+      <span class="chip" onclick="quick(this)">أبي موعد بكرة الصبح</span>
+      <span class="chip" onclick="quick(this)">وش دوامكم؟</span>
+      <span class="chip" onclick="quick(this)">وين موقعكم؟</span>
+      <span class="chip" onclick="quick(this)">بكم الزراعة؟</span>
+      <span class="chip" onclick="quick(this)">ودي ألغي موعدي</span>
+      <span class="chip" onclick="quick(this)">أبي أكلم وحدة</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   إعدادات العيادة — غيّر هنا لكل عميل جديد
+   ═══════════════════════════════════════════════════ */
+const CLINIC = {
+  name: "عيادة الابتسامة",
+  address: "طريق الملك فهد، حي العليا، الرياض",
+  hours: "من ٩ صباحاً إلى ٩ مساءً، عدا يوم الجمعة",
+  // الأحد=0، الاثنين=1، الثلاثاء=2، الأربعاء=3، الخميس=4، الجمعة=5، السبت=6
+  workingDays: [0,1,2,3,4],      // الأحد → الخميس | الجمعة والسبت إجازة
+  openHour: 9, closeHour: 21, slotMinutes: 30,
+  services: {
+    "تنظيف الأسنان": "٣٠٠ ريال",
+    "حشو": "٤٠٠ ريال",
+    "تبييض": "١٥٠٠ ريال",
+    "زراعة أسنان": null,          // null = يحتاج كشف
+    "تقويم": null
+  }
+};
+
+const GREETING = `أهلاً وسهلاً، ${CLINIC.name}. كيف أقدر أساعدك؟`;
+const GOODBYE  = "شكراً لتواصلك معنا، وبانتظارك. في أمان الله.";
+const ESCALATE = "هذا يحتاج أحد من الفريق يرد عليك. سجّلت طلبك وبيتواصلون معك قريب.";
+
+/* ═══════════ تطبيع النص العربي ═══════════ */
+function norm(t){
+  if(!t) return "";
+  return t.trim()
+    .replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه")
+    .replace(/[ً-ْـ]/g,"")
+    .replace(/[^\w\s؀-ۿ]/g," ")
+    .replace(/\s+/g," ").trim();
+}
+
+/* ═══════════ فهم النية ═══════════ */
+const KW = {
+  booking : ["ابغي موعد","ابي موعد","ابغى","ودي احجز","احجز","حجز","موعد","متاح","فاضي","عايز ميعاد","اريد موعد"],
+  price   : ["كم","بكم","وش السعر","السعر","الاسعار","سعر","التكلفه","تكلفه","يكلف","كام","بكام"],
+  hours   : ["متي تفتحون","الدوام","وش دوامكم","ساعات العمل","مواعيد العمل","تفتحون","تسكرون","مفتوح","شغالين"],
+  location: ["وين","فين","العنوان","الموقع","مكانكم","كيف اوصل","الفرع","موقعكم","اين"],
+  cancel  : ["الغاء","الغي","اجل","تاجيل","اؤجل","ابي اغير"],
+  human   : ["ابي اكلم","وحده","شخص","موظف","الدكتور","بشر","حولني","مسؤول"],
+  bye     : ["شكرا","مشكور","يعطيك العافيه","خلاص","سلام","الله يعافيك"]
+};
+// عند التعادل: الإلغاء لازم يكسب الحجز، وإلا هنحجز لواحد عايز يلغي
+const PRIORITY = ["human","cancel","bye","booking","price","hours","location"];
+
+function detectIntent(text){
+  const t = norm(text);
+  if(!t) return "unknown";
+  const scores = {};
+  for(const [intent, words] of Object.entries(KW)){
+    let s = 0;
+    for(const w of words){ const k = norm(w); if(k && t.includes(k)) s += k.split(" ").length; }
+    if(s) scores[intent] = s;
+  }
+  const keys = Object.keys(scores);
+  if(!keys.length) return "unknown";
+  const top = Math.max(...Object.values(scores));
+  const tied = keys.filter(k => scores[k] === top);
+  if(tied.length === 1) return tied[0];
+  return PRIORITY.find(p => tied.includes(p)) || tied[0];
+}
+
+/* ═══════════ استخراج البيانات ═══════════ */
+function toEnDigits(s){ return s.replace(/[٠-٩]/g, d => "٠١٢٣٤٥٦٧٨٩".indexOf(d)); }
+
+function extractPhone(text){
+  let t = toEnDigits(text).replace(/[\s\-()]/g,"");
+  const m = t.match(/(?:\+?966|0)?5\d{8}/);
+  if(!m) return null;
+  let n = m[0];
+  if(n.startsWith("+966")) return n;
+  if(n.startsWith("966"))  return "+"+n;
+  if(n.startsWith("05"))   return "+966"+n.slice(1);
+  if(n.startsWith("5"))    return "+966"+n;
+  return null;
+}
+
+const TIME_WORDS = {"الصبح":10,"الصباح":10,"الظهر":13,"بعد الظهر":15,"العصر":16,"المغرب":18,"المسا":19,"المساء":19,"بالليل":20};
+function extractHour(text){
+  const t = norm(text);
+  for(const [w,h] of Object.entries(TIME_WORDS)) if(t.includes(norm(w))) return h;
+  const m = toEnDigits(text).match(/(\d{1,2})/);
+  if(m){ const h = +m[1]; if(h>=1 && h<=12) return h<9 ? h+12 : h; }
+  return null;
+}
+function extractDay(text){
+  const t = norm(text);
+  if(t.includes("بعد بكره")||t.includes("بعد غد")) return 2;
+  if(t.includes("بكره")||t.includes("بكرا")||t.includes("غدا")) return 1;
+  if(t.includes("اليوم")) return 0;
+  return null;
+}
+
+/* ═══════════ المواعيد ═══════════ */
+const AR_DAYS = ["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+let booked = new Set();
+
+function nextSlots(count, dayHint, hourHint){
+  const now = new Date();
+  const earliest = new Date(now.getTime() + 2*3600*1000);   // مفيش حجز خلال ساعتين
+  let cur = new Date(earliest);
+
+  if(dayHint !== null && dayHint !== undefined){
+    cur = new Date(now); cur.setDate(cur.getDate()+dayHint);
+    cur.setHours(CLINIC.openHour,0,0,0);
+  }
+  if(hourHint !== null && hourHint >= CLINIC.openHour && hourHint < CLINIC.closeHour && cur.getHours() < hourHint){
+    cur.setHours(hourHint,0,0,0);
+  }
+  // حماية: عمرنا ما نعرض موعد فات
+  if(cur < earliest) cur = new Date(earliest);
+
+  cur.setMinutes(cur.getMinutes() < 30 ? 0 : 30, 0, 0);
+
+  const out = []; let guard = 0;
+  while(out.length < count && guard++ < 600){
+    if(!CLINIC.workingDays.includes(cur.getDay())){
+      cur.setDate(cur.getDate()+1); cur.setHours(CLINIC.openHour,0,0,0); continue;
+    }
+    if(cur.getHours() < CLINIC.openHour){ cur.setHours(CLINIC.openHour,0,0,0); continue; }
+    if(cur.getHours() >= CLINIC.closeHour){
+      cur.setDate(cur.getDate()+1); cur.setHours(CLINIC.openHour,0,0,0); continue;
+    }
+    const key = cur.toISOString().slice(0,16);
+    if(!booked.has(key) && (hourHint === null || Math.abs(cur.getHours()-hourHint) <= 2)) out.push(new Date(cur));
+    cur.setMinutes(cur.getMinutes() + CLINIC.slotMinutes);
+  }
+  return out;
+}
+
+function fmtSlot(d){
+  const today = new Date();
+  let day = AR_DAYS[d.getDay()];
+  if(d.toDateString() === today.toDateString()) day = "اليوم";
+  else { const tm = new Date(today); tm.setDate(tm.getDate()+1);
+         if(d.toDateString() === tm.toDateString()) day = "بكرة"; }
+  const h24 = d.getHours(), h12 = h24 % 12 || 12;
+  const period = h24 < 12 ? "الصباح" : (h24 < 18 ? "العصر" : "المساء");
+  return `${day} الساعة ${h12}${d.getMinutes() === 30 ? " والنص" : ""} ${period}`;
+}
+
+/* ═══════════ عقل المحادثة ═══════════ */
+let S = {};
+function reset(){
+  S = { state:"listening", name:null, phone:null, service:null, slot:null, offered:[], miss:0, done:false, log:[] };
+  document.getElementById("chat").innerHTML = "";
+  document.getElementById("wa").innerHTML = '<span class="empty">هيظهر هنا بعد ما المكالمة تخلص…</span>';
+  bot(GREETING);
+}
+
+function findService(text){
+  const t = norm(text);
+  for(const [name, price] of Object.entries(CLINIC.services)){
+    if(t.includes(norm(name))) return [name, price];
+    const first = norm(name).split(" ")[0];
+    if(first.length > 3 && t.includes(first)) return [name, price];
+  }
+  return [null, null];
+}
+
+function offer(dayHint, hourHint){
+  S.offered = nextSlots(2, dayHint, hourHint);
+  if(!S.offered.length){ S.state = "escalate"; S.done = true; return "ما لقيت مواعيد قريبة. بسجّل طلبك ويتواصلون معك."; }
+  S.state = "slot";
+  return `متوفر عندنا ${S.offered.map(fmtSlot).join(" أو ")}. أيهم يناسبك؟`;
+}
+
+function reply(text){
+  const intent = detectIntent(text);
+
+  if(intent === "human"){ S.state="escalate"; S.done=true; return ESCALATE; }
+  if(intent === "bye" && S.state !== "name" && S.state !== "phone"){ S.done=true; return GOODBYE; }
+
+  if(S.state === "listening"){
+    if(intent === "booking"){
+      const [sv] = findService(text); if(sv) S.service = sv;
+      return offer(extractDay(text), extractHour(text));
+    }
+    if(intent === "price"){
+      const [sv, pr] = findService(text);
+      if(sv) S.service = sv;
+      if(sv && pr) return `${sv} عندنا بـ ${pr}. تحب أحجز لك موعد؟`;
+      if(sv) return `${sv} السعر يعتمد على الحالة ويحتاج كشف أول. الكشف مجاني. تحب أحجز لك؟`;
+      return "عندنا تنظيف وحشو وتبييض وزراعة وتقويم. أي خدمة تسأل عنها؟";
+    }
+    if(intent === "hours")    return `دوامنا ${CLINIC.hours}. تحب أحجز لك موعد؟`;
+    if(intent === "location") return `موقعنا في ${CLINIC.address}. تحب أحجز لك موعد؟`;
+    if(intent === "cancel"){ S.state="escalate"; S.done=true; return "للإلغاء أو التأجيل بحوّلك لأحد الفريق، بيتواصلون معك."; }
+
+    if(++S.miss >= 2){ S.state="escalate"; S.done=true; return "عشان أخدمك أفضل، بسجّل رقمك ويتواصل معك أحد الفريق."; }
+    return "عذراً، ما وصلني كلامك زين. تحب تحجز موعد ولا تسأل عن خدمة؟";
+  }
+
+  if(S.state === "slot"){
+    const t = norm(text); let chosen = null;
+    // ملاحظة: \b في الـ regex مبيشتغلش مع الحروف العربية — نستخدم includes
+    const has = (...words) => words.some(w => t.includes(w));
+    if(has("الاول","اول","الاولي")) chosen = S.offered[0];
+    else if(has("الثاني","التاني","الثانيه","التانيه")) chosen = S.offered[1] || null;
+    else {
+      for(const s of S.offered){
+        const parts = norm(fmtSlot(s)).split(" ").filter(p => p.length > 2);
+        if(parts.some(p => t.includes(p))){ chosen = s; break; }
+      }
+      if(!chosen && has("تمام","زين","مناسب","اوك","نعم","ماشي","طيب","ايه")) chosen = S.offered[0];
+    }
+    if(!chosen){
+      const d = extractDay(text), h = extractHour(text);
+      if(d !== null || h !== null) return offer(d, h);
+      return "ما ضبطت. تفضل الموعد الأول ولا الثاني؟";
+    }
+    S.slot = chosen; S.state = "name";
+    return "تمام. الاسم الكريم؟";
+  }
+
+  if(S.state === "name"){
+    let n = text.trim().replace(/^(انا|أنا|اسمي|اسمى|الاسم)\s*/,"");
+    S.name = n || "غير محدد"; S.state = "phone";
+    return `تشرفنا ${S.name}. ورقم الجوال للتأكيد؟`;
+  }
+
+  if(S.state === "phone"){
+    const p = extractPhone(text);
+    if(!p){
+      if(++S.miss >= 3){ S.phone = "غير محدد"; return confirm_(); }
+      return "ما وصلني الرقم صحيح. ممكن تعيده رقم رقم؟";
+    }
+    S.phone = p; return confirm_();
+  }
+
+  S.done = true; return GOODBYE;
+}
+
+function confirm_(){
+  booked.add(S.slot.toISOString().slice(0,16));
+  S.state = "confirmed"; S.done = true;
+  return `تم الحجز ${S.name} — ${fmtSlot(S.slot)}. بيوصلك تأكيد على الجوال. في أمان الله.`;
+}
+
+function summary(){
+  if(S.state === "confirmed"){
+    return `🦷 حجز جديد — ${CLINIC.name}\n─────────────\nالاسم: ${S.name}\nالجوال: ${S.phone}\nالخدمة: ${S.service || "كشف عام"}\nالموعد: ${fmtSlot(S.slot)}\n─────────────\nعبر الرد الآلي`;
+  }
+  const outcome = S.state === "escalate" ? "يحتاج متابعة ⚠️" : "بدون حجز";
+  return `📞 مكالمة — ${CLINIC.name}\n─────────────\nالحالة: ${outcome}\n─────────────\n` +
+         S.log.map(([w,m]) => `${w === "bot" ? "الوكيل" : "المتصل"}: ${m}`).join("\n");
+}
+
+/* ═══════════ الواجهة ═══════════ */
+function add(cls, text){
+  const c = document.getElementById("chat");
+  const d = document.createElement("div");
+  d.className = "msg " + cls; d.textContent = text;
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+function bot(t){ add("bot", t);  S.log.push(["bot", t]); }
+function usr(t){ add("user", t); S.log.push(["usr", t]); }
+
+function send(){
+  const i = document.getElementById("inp");
+  const v = i.value.trim();
+  if(!v || S.done) { if(S.done) hint(); return; }
+  usr(v); i.value = "";
+  setTimeout(() => {
+    bot(reply(v));
+    if(S.done){
+      document.getElementById("wa").textContent = summary();
+      hint();
+    }
+  }, 320);
+}
+function hint(){
+  const c = document.getElementById("chat");
+  if(c.querySelector(".sys")) return;
+  const d = document.createElement("div");
+  d.className = "msg sys"; d.textContent = "— انتهت المكالمة — اضغط ↺ لمكالمة جديدة";
+  c.appendChild(d); c.scrollTop = c.scrollHeight;
+}
+function quick(el){ document.getElementById("inp").value = el.textContent; send(); }
+
+document.getElementById("inp").addEventListener("keydown", e => { if(e.key === "Enter") send(); });
+reset();
+</script>
+</body>
+</html>
