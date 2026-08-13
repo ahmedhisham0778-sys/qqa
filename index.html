@@ -3,30 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>صوت | مساعد العيادات الذكي</title>
+<title>الهشام للعقارات | المساعد الذكي</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#080b14;--surface:rgba(255,255,255,.035);--surface2:rgba(255,255,255,.06);
+  --bg:#0a0e1a;--surface:rgba(255,255,255,.035);--surface2:rgba(255,255,255,.06);
   --line:rgba(255,255,255,.08);--line2:rgba(255,255,255,.14);
   --txt:#eef2f8;--txt2:#94a3b8;--txt3:#64748b;
-  --accent:#6366f1;--accent2:#8b5cf6;--green:#10b981;--red:#f43f5e;--amber:#f59e0b;--r:20px;
+  --accent:#c9a227;--accent2:#e0b93d;--ink:#0a0e1a;
+  --green:#10b981;--red:#f43f5e;--amber:#f59e0b;--r:20px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--txt);
   min-height:100vh;padding:24px 20px;display:flex;justify-content:center;align-items:flex-start;
   position:relative;overflow-x:hidden}
 body::before,body::after{content:'';position:fixed;border-radius:50%;filter:blur(120px);z-index:0;pointer-events:none}
-body::before{width:600px;height:600px;background:rgba(99,102,241,.13);top:-250px;right:-150px}
-body::after{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-250px;left:-150px}
+body::before{width:600px;height:600px;background:rgba(201,162,39,.10);top:-250px;right:-150px}
+body::after{width:500px;height:500px;background:rgba(56,102,160,.12);bottom:-250px;left:-150px}
 .app{width:100%;max-width:1120px;position:relative;z-index:1}
 
 .topbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:22px;flex-wrap:wrap}
 .brand{display:flex;align-items:center;gap:13px}
-.logo{width:46px;height:46px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));
-  display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 8px 28px rgba(99,102,241,.4)}
+.logo{width:48px;height:48px;border-radius:14px;flex-shrink:0;background:linear-gradient(135deg,var(--accent),var(--accent2));
+  display:flex;align-items:center;justify-content:center;font-size:23px;color:var(--ink);
+  box-shadow:0 8px 28px rgba(201,162,39,.35)}
 .brand h1{font-size:19px;font-weight:800;letter-spacing:-.3px}
 .brand span{font-size:12.5px;color:var(--txt3);font-weight:400}
 .pill{display:inline-flex;align-items:center;gap:7px;padding:8px 15px;border-radius:100px;
@@ -39,10 +41,10 @@ body::after{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-250p
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 .panel{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
   border:1px solid var(--line);border-radius:var(--r);backdrop-filter:blur(20px);overflow:hidden;
-  box-shadow:0 20px 60px rgba(0,0,0,.4)}
+  box-shadow:0 20px 60px rgba(0,0,0,.45)}
 
 .callhead{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:13px}
-.avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#0ea5e9,#6366f1);
+.avatar{width:44px;height:44px;border-radius:50%;flex-shrink:0;background:linear-gradient(135deg,#3866a0,#c9a227);
   display:flex;align-items:center;justify-content:center;font-size:20px}
 .callhead .who{flex:1;min-width:0}
 .callhead .who b{display:block;font-size:15.5px;font-weight:700}
@@ -50,19 +52,19 @@ body::after{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-250p
 .live{width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 2s infinite}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
 
-#chat{height:360px;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
+#chat{height:350px;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:14px;scroll-behavior:smooth}
 #chat::-webkit-scrollbar{width:6px}
 #chat::-webkit-scrollbar-thumb{background:var(--line2);border-radius:10px}
 .row{display:flex;gap:10px;align-items:flex-end;animation:rise .35s cubic-bezier(.2,.8,.3,1)}
 .row.me{flex-direction:row-reverse}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 .pic{width:30px;height:30px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:14px}
-.pic.b{background:linear-gradient(135deg,#0ea5e9,#6366f1)}
+.pic.b{background:linear-gradient(135deg,#3866a0,#c9a227)}
 .pic.u{background:var(--surface2);border:1px solid var(--line2)}
 .bubble{max-width:75%;padding:12px 17px;font-size:14.5px;line-height:1.75;white-space:pre-wrap;word-break:break-word}
 .bubble.b{background:var(--surface2);border:1px solid var(--line);border-radius:20px 20px 20px 6px}
-.bubble.u{background:linear-gradient(135deg,var(--accent),var(--accent2));border-radius:20px 20px 6px 20px;
-  box-shadow:0 6px 20px rgba(99,102,241,.3)}
+.bubble.u{background:linear-gradient(135deg,#8a6f1a,var(--accent));color:#fff;border-radius:20px 20px 6px 20px;
+  box-shadow:0 6px 20px rgba(201,162,39,.25)}
 .note-sys{align-self:center;font-size:12px;color:var(--txt3);padding:6px 14px;background:var(--surface);
   border-radius:100px;border:1px solid var(--line)}
 .dots{display:flex;gap:4px;padding:15px 18px}
@@ -70,31 +72,31 @@ body::after{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-250p
 .dots i:nth-child(2){animation-delay:.16s}.dots i:nth-child(3){animation-delay:.32s}
 @keyframes bob{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
 
-.miczone{padding:26px 22px 22px;border-top:1px solid var(--line);display:flex;flex-direction:column;
-  align-items:center;gap:14px;background:rgba(0,0,0,.18)}
+.miczone{padding:24px 22px 20px;border-top:1px solid var(--line);display:flex;flex-direction:column;
+  align-items:center;gap:13px;background:rgba(0,0,0,.2)}
 .micwrap{position:relative;width:88px;height:88px;display:flex;align-items:center;justify-content:center}
 .ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--accent);opacity:0}
 .rec .ring{animation:ripple 1.8s ease-out infinite}
 .rec .ring:nth-child(2){animation-delay:.6s}
 @keyframes ripple{0%{transform:scale(.85);opacity:.7}100%{transform:scale(1.75);opacity:0}}
 .mic{width:74px;height:74px;border-radius:50%;border:0;cursor:pointer;position:relative;z-index:2;
-  background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-size:28px;
-  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 34px rgba(99,102,241,.45);transition:transform .2s}
+  background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--ink);font-size:28px;
+  display:flex;align-items:center;justify-content:center;box-shadow:0 10px 34px rgba(201,162,39,.4);transition:transform .2s}
 .mic:hover{transform:scale(1.06)}.mic:active{transform:scale(.96)}
-.rec .mic{background:linear-gradient(135deg,#f43f5e,#e11d48);box-shadow:0 10px 34px rgba(244,63,94,.5)}
-.spk .mic{background:linear-gradient(135deg,#10b981,#059669);box-shadow:0 10px 34px rgba(16,185,129,.45)}
-.status{font-size:14px;color:var(--txt2);min-height:22px;text-align:center;font-weight:500;max-width:90%}
+.rec .mic{background:linear-gradient(135deg,#f43f5e,#e11d48);color:#fff;box-shadow:0 10px 34px rgba(244,63,94,.5)}
+.spk .mic{background:linear-gradient(135deg,#10b981,#059669);color:#fff;box-shadow:0 10px 34px rgba(16,185,129,.45)}
+.status{font-size:14px;color:var(--txt2);min-height:22px;text-align:center;font-weight:500;max-width:92%}
 .toggle{display:flex;align-items:center;gap:9px;font-size:12.5px;color:var(--txt3);cursor:pointer;user-select:none}
 .toggle input{accent-color:var(--accent);width:15px;height:15px;cursor:pointer}
 
 .typebar{display:flex;gap:9px;padding:14px 16px;border-top:1px solid var(--line)}
 .typebar input{flex:1;padding:13px 17px;border-radius:14px;border:1px solid var(--line);
-  background:rgba(0,0,0,.28);color:var(--txt);font-size:14.5px;font-family:inherit;transition:.2s}
-.typebar input:focus{outline:none;border-color:var(--accent);background:rgba(0,0,0,.4)}
+  background:rgba(0,0,0,.3);color:var(--txt);font-size:14.5px;font-family:inherit;transition:.2s}
+.typebar input:focus{outline:none;border-color:var(--accent);background:rgba(0,0,0,.42)}
 .typebar input::placeholder{color:var(--txt3)}
 .btn{padding:13px 20px;border:0;border-radius:14px;font-size:14px;font-weight:700;cursor:pointer;
-  font-family:inherit;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;transition:.2s;white-space:nowrap}
-.btn:hover{filter:brightness(1.12)}
+  font-family:inherit;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--ink);transition:.2s;white-space:nowrap}
+.btn:hover{filter:brightness(1.1)}
 .btn:disabled{background:var(--surface2);color:var(--txt3);cursor:not-allowed;filter:none}
 .btn.sec{background:var(--surface2);border:1px solid var(--line);color:var(--txt2);padding:13px 15px}
 
@@ -102,12 +104,12 @@ body::after{width:500px;height:500px;background:rgba(139,92,246,.1);bottom:-250p
 .box{padding:19px}
 .box h3{font-size:13px;font-weight:700;color:var(--txt2);margin-bottom:13px;display:flex;align-items:center;gap:8px}
 .field{width:100%;padding:12px 15px;border-radius:12px;border:1px solid var(--line);
-  background:rgba(0,0,0,.28);color:var(--txt);font-size:13.5px;font-family:inherit;transition:.2s}
+  background:rgba(0,0,0,.3);color:var(--txt);font-size:13.5px;font-family:inherit;transition:.2s}
 .field:focus{outline:none;border-color:var(--accent)}
-select.field{cursor:pointer}select.field option{background:#131a2b}
+select.field{cursor:pointer}select.field option{background:#151b2c}
 .hint{font-size:11.5px;color:var(--txt3);line-height:1.85;margin-top:11px}
 .hint b{color:var(--txt2)}
-.hint code{background:rgba(99,102,241,.16);color:#a5b4fc;padding:2px 7px;border-radius:6px;
+.hint code{background:rgba(201,162,39,.16);color:#e8cf7a;padding:2px 7px;border-radius:6px;
   font-size:11px;font-family:monospace;direction:ltr;display:inline-block}
 .good{color:#6ee7b7}.bad{color:#fda4af}
 .alert{margin-top:11px;padding:11px 13px;border-radius:11px;font-size:12px;line-height:1.75;display:none}
@@ -116,18 +118,24 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
 .alert.err{background:rgba(244,63,94,.11);border:1px solid rgba(244,63,94,.3);color:#fda4af}
 .alert.ok{background:rgba(16,185,129,.11);border:1px solid rgba(16,185,129,.3);color:#6ee7b7}
 .wa{background:#0a1119;border:1px solid var(--line);border-radius:14px;padding:15px;
-  font-size:12.5px;line-height:1.95;white-space:pre-wrap;color:#cbd5e1;min-height:112px}
+  font-size:12.5px;line-height:1.95;white-space:pre-wrap;color:#cbd5e1;min-height:130px}
 .wa .none{color:var(--txt3);font-style:italic}
 .chips{display:flex;flex-wrap:wrap;gap:7px}
 .chip{background:var(--surface2);border:1px solid var(--line);color:var(--txt2);padding:7px 13px;
   border-radius:100px;font-size:12.5px;cursor:pointer;transition:.2s;font-family:inherit}
-.chip:hover{background:rgba(99,102,241,.18);border-color:var(--accent);color:var(--txt)}
+.chip:hover{background:rgba(201,162,39,.18);border-color:var(--accent);color:var(--txt)}
 .secbanner{display:none;margin-bottom:18px;padding:16px 19px;border-radius:16px;
   background:rgba(245,158,11,.09);border:1px solid rgba(245,158,11,.32);font-size:13.5px;line-height:1.9;color:#fcd34d}
 .secbanner.show{display:block}
 .secbanner b{color:#fde68a}
 .secbanner code{background:rgba(0,0,0,.35);padding:3px 9px;border-radius:7px;font-family:monospace;
   direction:ltr;display:inline-block;color:#fef3c7}
+.score{display:flex;gap:6px;margin-top:10px}
+.sbadge{flex:1;text-align:center;padding:7px 4px;border-radius:9px;font-size:11px;font-weight:700;
+  background:var(--surface2);border:1px solid var(--line);color:var(--txt3)}
+.sbadge.hot{background:rgba(244,63,94,.15);border-color:rgba(244,63,94,.4);color:#fda4af}
+.sbadge.warm{background:rgba(245,158,11,.15);border-color:rgba(245,158,11,.4);color:#fcd34d}
+.sbadge.cold{background:rgba(100,116,139,.15);border-color:var(--line2);color:var(--txt2)}
 </style>
 </head>
 <body>
@@ -135,8 +143,8 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
 
   <div class="topbar">
     <div class="brand">
-      <div class="logo">◎</div>
-      <div><h1>صوت</h1><span>مساعد استقبال ذكي للعيادات</span></div>
+      <div class="logo">◈</div>
+      <div><h1>الهشام للعقارات</h1><span>مساعد المبيعات الذكي</span></div>
     </div>
     <div class="pill" id="pill"><span class="dot"></span><span id="pillTxt">وضع تجريبي</span></div>
   </div>
@@ -146,10 +154,10 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
   <div class="grid">
     <div class="panel">
       <div class="callhead">
-        <div class="avatar">🦷</div>
+        <div class="avatar">🏢</div>
         <div class="who">
-          <b id="clinicName">عيادة الابتسامة</b>
-          <small><span class="live"></span> متصل الآن · الرد الآلي</small>
+          <b id="coName">الهشام للعقارات</b>
+          <small><span class="live"></span> متاح الآن · رد آلي ٢٤ ساعة</small>
         </div>
       </div>
       <div id="chat"></div>
@@ -160,9 +168,9 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
         <label class="toggle"><input type="checkbox" id="auto" checked> وضع المكالمة المستمرة</label>
       </div>
       <div class="typebar">
-        <input id="inp" placeholder="أو اكتب رسالتك هنا…" autocomplete="off">
+        <input id="inp" placeholder="اكتب زي ما العميل بيكتب…" autocomplete="off">
         <button class="btn" id="sendBtn" onclick="send()">إرسال</button>
-        <button class="btn sec" onclick="reset()" title="مكالمة جديدة">↻</button>
+        <button class="btn sec" onclick="reset()" title="محادثة جديدة">↻</button>
       </div>
     </div>
 
@@ -170,44 +178,48 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
       <div class="panel box">
         <h3>🔑 مفتاح الذكاء الاصطناعي</h3>
         <input id="key" class="field" type="password" placeholder="الصق المفتاح هنا…" oninput="setMode()">
-        <div class="hint"><span class="good">مجاناً بدون بطاقة —</span> افتح
-          <code>aistudio.google.com/apikey</code> ثم <b>Create API key</b> والصقه هنا.</div>
+        <div class="hint"><span class="good">مجاناً بدون بطاقة —</span>
+          <code>aistudio.google.com/apikey</code> ← <b>Create API key</b></div>
         <div class="alert err" id="err"></div>
       </div>
 
       <div class="panel box">
         <h3>🔊 صوت الرد</h3>
         <select id="engineSel" class="field" onchange="onEngineChange()">
-          <option value="gemini">صوت Google الطبيعي ✨ (يحتاج المفتاح)</option>
-          <option value="browser">صوت الويندوز (آلي)</option>
+          <option value="gemini">صوت Google الطبيعي ✨</option>
+          <option value="browser">صوت الجهاز (آلي)</option>
         </select>
         <select id="gVoiceSel" class="field" style="margin-top:8px">
-          <option value="Kore">Kore — أنثى، واضحة وحازمة</option>
+          <option value="Kore">Kore — أنثى، واضحة</option>
           <option value="Callirrhoe">Callirrhoe — أنثى، هادئة</option>
           <option value="Leda">Leda — أنثى، شابة</option>
-          <option value="Aoede">Aoede — أنثى، خفيفة</option>
-          <option value="Sulafat">Sulafat — أنثى، دافئة</option>
           <option value="Charon">Charon — ذكر، رسمي</option>
           <option value="Puck">Puck — ذكر، ودود</option>
         </select>
         <select id="voiceSel" class="field" style="margin-top:8px;display:none"></select>
         <button class="btn" style="width:100%;margin-top:10px" onclick="testVoice()">▶ اختبر الصوت</button>
-        <div class="hint" id="voiceNote">صوت Google أفضل بكثير وبيدعم العربي بشكل طبيعي.</div>
+        <div class="hint" id="voiceNote"></div>
         <div class="alert" id="voiceAlert"></div>
       </div>
 
       <div class="panel box">
-        <h3>💬 ملخص المكالمة للعيادة</h3>
-        <div class="wa" id="wa"><span class="none">يظهر هنا بعد انتهاء المكالمة…</span></div>
+        <h3>📋 كارت العميل — بيوصلك واتساب</h3>
+        <div class="wa" id="wa"><span class="none">يظهر هنا بعد انتهاء المحادثة…</span></div>
+        <div class="score">
+          <div class="sbadge" id="bHot">جاد 🔥</div>
+          <div class="sbadge" id="bWarm">محتمل</div>
+          <div class="sbadge" id="bCold">استكشاف</div>
+        </div>
       </div>
 
       <div class="panel box">
-        <h3>⚡ جرّب</h3>
+        <h3>⚡ جرّب زي العميل</h3>
         <div class="chips">
-          <button class="chip" onclick="quick(this)">أبغى موعد</button>
-          <button class="chip" onclick="quick(this)">كم سعر التبييض؟</button>
-          <button class="chip" onclick="quick(this)">عندي ضرس مكسور ويوجعني</button>
-          <button class="chip" onclick="quick(this)">وش دوامكم؟</button>
+          <button class="chip" onclick="quick(this)">عندكم شقق في التجمع؟</button>
+          <button class="chip" onclick="quick(this)">بكام الشقة؟</button>
+          <button class="chip" onclick="quick(this)">فيه تقسيط؟</button>
+          <button class="chip" onclick="quick(this)">عايز أعاين</button>
+          <button class="chip" onclick="quick(this)">ميزانيتي ٣ مليون</button>
         </div>
       </div>
     </div>
@@ -215,96 +227,163 @@ select.field{cursor:pointer}select.field option{background:#131a2b}
 </div>
 
 <script>
-/* ══════ ١) إعدادات العيادة ══════ */
-const CLINIC={
-  name:"عيادة الابتسامة",
-  address:"طريق الملك فهد، حي العليا، الرياض",
-  hours:"من ٩ صباحاً إلى ٩ مساءً، عدا يوم الجمعة",
-  workingDays:[0,1,2,3,4],openHour:9,closeHour:21,slotMinutes:30,
-  services:{"تنظيف الأسنان":"٣٠٠ ريال","حشو":"٤٠٠ ريال","تبييض":"١٥٠٠ ريال","زراعة أسنان":null,"تقويم":null}
+/* ══════════════════════════════════════════════
+   ١) بيانات الشركة والوحدات
+   ⚠️ ده الجزء الوحيد اللي بتغيّره — حط وحداتك الحقيقية
+   ══════════════════════════════════════════════ */
+const CO={
+  name:"الهشام للعقارات",
+  phone:"01000000000",
+  office:"التجمع الخامس، القاهرة الجديدة",
+  hours:"من ١٠ صباحاً لـ ٨ مساءً، الجمعة إجازة",
+  workingDays:[0,1,2,3,4,6],   // الأحد=0 … الجمعة=5 إجازة
+  openHour:10, closeHour:20, slotMinutes:60,
+
+  units:[
+    {id:"A1", type:"شقة", area:"التجمع الخامس", size:"١٥٠ م", rooms:3,
+     price:"٣,٢٠٠,٠٠٠ جنيه", down:"٢٠٪ مقدم", plan:"تقسيط ٧ سنين", ready:"استلام فوري"},
+    {id:"A2", type:"شقة", area:"التجمع الخامس", size:"١٩٠ م", rooms:3,
+     price:"٤,١٠٠,٠٠٠ جنيه", down:"١٥٪ مقدم", plan:"تقسيط ٨ سنين", ready:"استلام ٢٠٢٧"},
+    {id:"B1", type:"شقة", area:"مدينة نصر", size:"١٢٠ م", rooms:2,
+     price:"٢,٤٠٠,٠٠٠ جنيه", down:"٢٥٪ مقدم", plan:"تقسيط ٥ سنين", ready:"استلام فوري"},
+    {id:"C1", type:"فيلا", area:"الشيخ زايد", size:"٣٢٠ م", rooms:4,
+     price:"١٢,٠٠٠,٠٠٠ جنيه", down:"٣٠٪ مقدم", plan:"تقسيط ٦ سنين", ready:"استلام ٢٠٢٧"},
+    {id:"D1", type:"محل تجاري", area:"التجمع الخامس", size:"٦٥ م", rooms:0,
+     price:"٥,٥٠٠,٠٠٠ جنيه", down:"٤٠٪ مقدم", plan:"تقسيط ٣ سنين", ready:"استلام فوري"}
+  ]
 };
-const GREETING=`أهلاً وسهلاً، ${CLINIC.name}. كيف أقدر أساعدك؟`;
-const GOODBYE="شكراً لتواصلك معنا، وبانتظارك. في أمان الله.";
-const ESCALATE="هذا يحتاج أحد من الفريق يرد عليك. سجّلت طلبك وبيتواصلون معك قريب.";
+
+const GREETING=`أهلاً بحضرتك في ${CO.name}. تحت أمرك، بتدور على إيه؟`;
+const GOODBYE="شكراً لتواصلك معانا. في انتظارك في أي وقت.";
+const ESCALATE="هوصّل استفسارك لأستاذ أحمد وهيتواصل مع حضرتك في أقرب وقت.";
 
 /* ══════ ٢) أدوات النص ══════ */
 function norm(t){return !t?"":t.trim().replace(/[أإآٱ]/g,"ا").replace(/ى/g,"ي").replace(/ة/g,"ه")
   .replace(/[ً-ْـ]/g,"").replace(/[^\w\s؀-ۿ]/g," ").replace(/\s+/g," ").trim();}
 function toEn(s){return String(s).replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d));}
+// أرقام مصرية: 010/011/012/015
 function extractPhone(t){
-  const m=toEn(t).replace(/[\s\-()]/g,"").match(/(?:\+?966|0)?5\d{8}/);if(!m)return null;
-  let n=m[0];
-  if(n.startsWith("+966"))return n;if(n.startsWith("966"))return "+"+n;
-  if(n.startsWith("05"))return "+966"+n.slice(1);if(n.startsWith("5"))return "+966"+n;
+  const m=toEn(t).replace(/[\s\-()]/g,"").match(/(?:\+?20)?0?1[0125]\d{8}/);
+  if(!m)return null;
+  let n=m[0].replace(/^\+?20/,"");
+  if(!n.startsWith("0")) n="0"+n;
+  return n;
+}
+// ميزانية: "٣ مليون"، "2.5 م"، "3500000"
+function extractBudget(t){
+  const s=toEn(t).replace(/,/g,"");
+  // ملاحظة: \b مبيشتغلش مع الحروف العربية — بنستخدم مسافة أو نهاية النص بدالها
+  let m=s.match(/(\d+(?:\.\d+)?)\s*(?:مليون|مليوان|م(?=\s|$)|mil)/i);
+  if(m) return Math.round(parseFloat(m[1])*1e6);
+  m=s.match(/(\d+(?:\.\d+)?)\s*(?:الف|ألف|k(?=\s|$))/i);
+  if(m) return Math.round(parseFloat(m[1])*1000);
+  m=s.match(/(\d{6,9})/);
+  if(m) return parseInt(m[1],10);
   return null;
 }
+function fmtMoney(n){ return n>=1e6 ? (n/1e6).toFixed(n%1e6?1:0)+" مليون" : (n/1000).toFixed(0)+" ألف"; }
 
-/* ══════ ٣) المواعيد ══════ */
-const AR_DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس","الجمعة","السبت"];
+/* ══════ ٣) المعاينات ══════ */
+const AR_DAYS=["الأحد","الاتنين","التلات","الأربع","الخميس","الجمعة","السبت"];
 let booked=new Set();
 function nextSlots(n,dayHint=null,hourHint=null){
-  const now=new Date(),earliest=new Date(now.getTime()+72e5);
+  const now=new Date(),earliest=new Date(now.getTime()+108e5); // ٣ ساعات
   let c=new Date(earliest);
-  if(dayHint!==null){c=new Date(now);c.setDate(c.getDate()+dayHint);c.setHours(CLINIC.openHour,0,0,0);}
-  if(hourHint!==null&&hourHint>=CLINIC.openHour&&hourHint<CLINIC.closeHour&&c.getHours()<hourHint)c.setHours(hourHint,0,0,0);
+  if(dayHint!==null){c=new Date(now);c.setDate(c.getDate()+dayHint);c.setHours(CO.openHour,0,0,0);}
+  if(hourHint!==null&&hourHint>=CO.openHour&&hourHint<CO.closeHour&&c.getHours()<hourHint)c.setHours(hourHint,0,0,0);
   if(c<earliest)c=new Date(earliest);
-  c.setMinutes(c.getMinutes()<30?0:30,0,0);
+  c.setMinutes(0,0,0);
   const out=[];let g=0;
   while(out.length<n&&g++<600){
-    if(!CLINIC.workingDays.includes(c.getDay())){c.setDate(c.getDate()+1);c.setHours(CLINIC.openHour,0,0,0);continue;}
-    if(c.getHours()<CLINIC.openHour){c.setHours(CLINIC.openHour,0,0,0);continue;}
-    if(c.getHours()>=CLINIC.closeHour){c.setDate(c.getDate()+1);c.setHours(CLINIC.openHour,0,0,0);continue;}
-    const k=c.toISOString().slice(0,16);
-    if(!booked.has(k)&&(hourHint===null||Math.abs(c.getHours()-hourHint)<=2))out.push(new Date(c));
-    c.setMinutes(c.getMinutes()+CLINIC.slotMinutes);
+    if(!CO.workingDays.includes(c.getDay())){c.setDate(c.getDate()+1);c.setHours(CO.openHour,0,0,0);continue;}
+    if(c.getHours()<CO.openHour){c.setHours(CO.openHour,0,0,0);continue;}
+    if(c.getHours()>=CO.closeHour){c.setDate(c.getDate()+1);c.setHours(CO.openHour,0,0,0);continue;}
+    const k=c.toISOString().slice(0,13);
+    if(!booked.has(k))out.push(new Date(c));
+    c.setHours(c.getHours()+1);
   }
   return out;
 }
 function fmtSlot(d){
   const t=new Date();let day=AR_DAYS[d.getDay()];
-  if(d.toDateString()===t.toDateString())day="اليوم";
+  if(d.toDateString()===t.toDateString())day="النهاردة";
   else{const m=new Date(t);m.setDate(m.getDate()+1);if(d.toDateString()===m.toDateString())day="بكرة";}
   const h=d.getHours(),h12=h%12||12;
-  return `${day} الساعة ${h12}${d.getMinutes()===30?" والنص":""} ${h<12?"الصباح":(h<18?"العصر":"المساء")}`;
+  return `${day} الساعة ${h12} ${h<12?"الصبح":(h<18?"العصر":"بالليل")}`;
 }
 
 /* ══════ ٤) الحالة ══════ */
 let S={};
 function reset(){
   stopAll();
-  S={name:null,phone:null,service:null,slot:null,offered:[],done:false,outcome:null,log:[],history:[],miss:0,state:"listening"};
+  S={name:null,phone:null,budget:null,unitType:null,area:null,payment:null,purpose:null,
+     slot:null,offered:[],done:false,outcome:null,log:[],history:[],miss:0,state:"open"};
   chat.innerHTML="";
-  document.getElementById("wa").innerHTML='<span class="none">يظهر هنا بعد انتهاء المكالمة…</span>';
+  document.getElementById("wa").innerHTML='<span class="none">يظهر هنا بعد انتهاء المحادثة…</span>';
+  ["bHot","bWarm","bCold"].forEach(id=>document.getElementById(id).className="sbadge");
   hideErr();bot(GREETING);
 }
 
-/* ══════ ٥) العقل الذكي ══════ */
+/* ══════ ٥) تقييم جدية العميل ══════ */
+function leadScore(){
+  let pts=0;
+  if(S.phone) pts+=2;
+  if(S.budget) pts+=2;
+  if(S.unitType) pts+=1;
+  if(S.area) pts+=1;
+  if(S.slot) pts+=3;              // وافق على معاينة = أقوى إشارة
+  if(S.payment) pts+=1;
+  if(pts>=7) return "hot";
+  if(pts>=4) return "warm";
+  return "cold";
+}
+function paintScore(){
+  const s=leadScore();
+  document.getElementById("bHot").className ="sbadge"+(s==="hot"?" hot":"");
+  document.getElementById("bWarm").className="sbadge"+(s==="warm"?" warm":"");
+  document.getElementById("bCold").className="sbadge"+(s==="cold"?" cold":"");
+}
+
+/* ══════ ٦) العقل الذكي ══════ */
 function buildSystemPrompt(){
   S.offered=nextSlots(3);
-  const svc=Object.entries(CLINIC.services).map(([n,p])=>`- ${n}: ${p||"يحتاج كشف أولاً (الكشف مجاني)"}`).join("\n");
+  const units=CO.units.map(u=>
+    `- ${u.id}: ${u.type} ${u.size} ${u.rooms?("("+u.rooms+" غرف)"):""} في ${u.area} — ${u.price} — ${u.down}، ${u.plan} — ${u.ready}`
+  ).join("\n");
   const sl=S.offered.map((s,i)=>`${i}: ${fmtSlot(s)}`).join("\n");
-  return `أنت موظف استقبال في ${CLINIC.name}. ترد على مكالمات هاتفية.
+  const known=[
+    S.name&&"الاسم: "+S.name, S.phone&&"الموبايل: "+S.phone,
+    S.budget&&"الميزانية: "+fmtMoney(S.budget), S.unitType&&"نوع الوحدة: "+S.unitType,
+    S.area&&"المنطقة: "+S.area, S.payment&&"طريقة الدفع: "+S.payment
+  ].filter(Boolean).join(" | ") || "لسه مفيش";
 
-معلومات العيادة:
-- العنوان: ${CLINIC.address}
-- الدوام: ${CLINIC.hours}
-- الخدمات:
-${svc}
+  return `إنت موظف مبيعات في ${CO.name} (شركة عقارات في مصر). بترد على العملاء واتساب ومكالمات.
 
-المواعيد المتاحة (استخدم الرقم عند الحجز):
+الوحدات المتاحة:
+${units}
+
+المكتب: ${CO.office}
+مواعيد العمل: ${CO.hours}
+
+مواعيد المعاينة المتاحة (استخدم الرقم عند الحجز):
 ${sl}
 
-قواعد مهمة:
-1. لهجة سعودية طبيعية ومختصرة. جملة أو جملتين بحد أقصى — هذي مكالمة هاتف مو شات.
-2. لا تخترع أسعار أو خدمات أو مواعيد.
-3. أي سؤال طبي: الدكتور يحدد بعد الكشف. لا تعطِ نصيحة طبية.
-4. للحجز تحتاج: الموعد + الاسم + الجوال. اطلبها واحدة واحدة.
-5. إلغاء/تعديل موعد قائم، أو طلب موظف بشري، أو موضوع معقد → action "escalate".
-6. لا تؤكد الحجز إلا بعد ما تجمع الثلاثة.
-7. اكتب الأرقام بالحروف (مثال: "الساعة ستة والنص") لأن ردك ينطق بصوت.
+معلومات جمعتها لحد دلوقتي: ${known}
 
-رد بـ JSON فقط:
-{"reply":"ردك","action":"none|book|escalate|end","slot_index":رقم أو null,"name":أو null,"phone":أو null,"service":أو null}`;
+قواعد مهمة:
+1. اتكلم مصري عامي طبيعي ومختصر. جملة أو جملتين بالكتير — ده رد على واتساب مش مقال.
+2. متخترعش وحدات أو أسعار أو مناطق مش في القايمة فوق. لو سأل عن حاجة مش عندنا قول بصراحة إنها مش متاحة دلوقتي واعرض البدايل.
+3. هدفك الأساسي: تعرف (أ) بيدور على إيه (ب) في أنهي منطقة (ج) ميزانيته (د) كاش ولا تقسيط. اسأل سؤال واحد في كل مرة، بشكل طبيعي مش استجواب.
+4. لما تجمع الميزانية ونوع الوحدة، اقترح أنسب وحدة من القايمة بالأرقام.
+5. الهدف النهائي: تحجزله معاينة + تاخد اسمه وموبايله. الحجز ده أهم حاجة.
+6. متضغطش على العميل. لو مش جاهز، خد بياناته وقول هنتواصل معاك.
+7. لو طلب يكلم حد، أو الموضوع قانوني/تعاقدي معقد → action "escalate".
+8. اكتب الأرقام بالحروف (مثال: "تلات مليون ومتين ألف") لأن ردك بينطق بصوت.
+
+رد بـ JSON بس:
+{"reply":"ردك","action":"none|book|escalate|end","slot_index":رقم أو null,
+ "name":أو null,"phone":أو null,"budget":رقم بالجنيه أو null,
+ "unit_type":أو null,"area":أو null,"payment":"كاش|تقسيط" أو null,"unit_id":أو null}`;
 }
 function keyProvider(k){return k.startsWith("sk-")?"openai":"gemini";}
 async function aiReply(text){
@@ -314,14 +393,14 @@ async function aiReply(text){
   S.history.push({role:"assistant",content:raw});
   try{return JSON.parse(raw);}
   catch{const m=raw.match(/\{[\s\S]*\}/);if(m){try{return JSON.parse(m[0]);}catch{}}
-    return {reply:"عذراً، ممكن تعيد؟",action:"none"};}
+    return {reply:"معلش مسمعتش كويس، ممكن تعيد؟",action:"none"};}
 }
 async function callGemini(key){
-  const contents=S.history.slice(-10).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}));
+  const contents=S.history.slice(-12).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}));
   const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key),
     {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       system_instruction:{parts:[{text:buildSystemPrompt()}]},contents,
-      generationConfig:{responseMimeType:"application/json",temperature:.4,maxOutputTokens:400}})});
+      generationConfig:{responseMimeType:"application/json",temperature:.5,maxOutputTokens:500}})});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
   const j=await r.json(),t=j.candidates?.[0]?.content?.parts?.[0]?.text;
   if(!t)throw new Error("مفيش رد من الموديل");return t;
@@ -329,30 +408,37 @@ async function callGemini(key){
 async function callOpenAI(key){
   const r=await fetch("https://api.openai.com/v1/chat/completions",{method:"POST",
     headers:{"Content-Type":"application/json","Authorization":"Bearer "+key},
-    body:JSON.stringify({model:"gpt-4o-mini",response_format:{type:"json_object"},temperature:.4,max_tokens:400,
-      messages:[{role:"system",content:buildSystemPrompt()},...S.history.slice(-10)]})});
+    body:JSON.stringify({model:"gpt-4o-mini",response_format:{type:"json_object"},temperature:.5,max_tokens:500,
+      messages:[{role:"system",content:buildSystemPrompt()},...S.history.slice(-12)]})});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
   return (await r.json()).choices[0].message.content;
 }
 function applyAction(d){
   if(d.name)S.name=d.name;
   if(d.phone)S.phone=extractPhone(d.phone)||d.phone;
-  if(d.service)S.service=d.service;
+  if(d.budget)S.budget=Number(d.budget)||S.budget;
+  if(d.unit_type)S.unitType=d.unit_type;
+  if(d.area)S.area=d.area;
+  if(d.payment)S.payment=d.payment;
+  if(d.unit_id)S.unitId=d.unit_id;
   if(d.action==="book"){const i=Number(d.slot_index);
-    if(S.offered[i]){S.slot=S.offered[i];booked.add(S.slot.toISOString().slice(0,16));S.outcome="confirmed";S.done=true;}}
+    if(S.offered[i]){S.slot=S.offered[i];booked.add(S.slot.toISOString().slice(0,13));S.outcome="booked";S.done=true;}}
   else if(d.action==="escalate"){S.outcome="escalate";S.done=true;}
   else if(d.action==="end"){S.outcome="no_booking";S.done=true;}
+  paintScore();
 }
 
-/* ══════ ٦) العقل البسيط (احتياطي) ══════ */
-const KW={booking:["ابغي موعد","ابي موعد","ابغى","ودي احجز","احجز","حجز","موعد","متاح","فاضي"],
- price:["كم","بكم","وش السعر","السعر","الاسعار","سعر","تكلفه","يكلف","كام","بكام"],
- hours:["متي تفتحون","الدوام","وش دوامكم","ساعات العمل","تفتحون","مفتوح","شغالين"],
- location:["وين","فين","العنوان","الموقع","مكانكم","كيف اوصل","موقعكم","اين"],
- cancel:["الغاء","الغي","اجل","تاجيل","اؤجل","ابي اغير"],
- human:["ابي اكلم","وحده","شخص","موظف","الدكتور","بشر","حولني"],
- bye:["شكرا","مشكور","يعطيك العافيه","خلاص","سلام"]};
-const PRIORITY=["human","cancel","bye","booking","price","hours","location"];
+/* ══════ ٧) العقل البسيط (بدون مفتاح) ══════ */
+const KW={
+  view:["معاينه","اعاين","اشوف","زياره","ازور","موعد","احجز","معاينة"],
+  price:["كام","بكام","السعر","الاسعار","سعر","تكلفه","يكلف","بيتباع"],
+  install:["تقسيط","اقساط","قسط","مقدم","كاش","دفعه"],
+  avail:["عندكم","متاح","متوفر","فيه","شقق","شقه","فيلا","محل","دوبلكس","ارض"],
+  location:["فين","مكان","العنوان","منطقه","التجمع","زايد","نصر","المكتب"],
+  human:["اكلم","حضرتك","الاستاذ","مسؤول","حد","بشر","احمد"],
+  bye:["شكرا","متشكر","تمام كده","سلام","مع السلامه"]
+};
+const PRIORITY=["human","bye","view","install","price","avail","location"];
 function detectIntent(text){
   const t=norm(text);if(!t)return "unknown";const sc={};
   for(const [i,ws] of Object.entries(KW)){let s=0;
@@ -361,396 +447,369 @@ function detectIntent(text){
   const top=Math.max(...Object.values(sc)),tied=ks.filter(k=>sc[k]===top);
   return tied.length===1?tied[0]:(PRIORITY.find(p=>tied.includes(p))||tied[0]);
 }
-function findService(text){
+function findArea(text){
   const t=norm(text);
-  for(const [n,p] of Object.entries(CLINIC.services)){
-    if(t.includes(norm(n)))return [n,p];
-    const f=norm(n).split(" ")[0];if(f.length>3&&t.includes(f))return [n,p];}
-  return [null,null];
+  // مطابقة كاملة الأول: "التجمع الخامس"
+  for(const u of CO.units){ if(t.includes(norm(u.area))) return u.area; }
+  // وبعدين جزئية: العميل بيقول "التجمع" أو "زايد" مش الاسم كامل
+  for(const u of CO.units){
+    const words=norm(u.area).split(" ").filter(w=>w.length>2 && w!=="مدينه" && w!=="الشيخ");
+    if(words.some(w=>t.includes(w))) return u.area;
+  }
+  return null;
 }
+function findType(text){
+  const t=norm(text);
+  // بنشيل "ال" و نتعامل مع الجمع: شقه/شقق، فيلا/فلل، محل/محلات
+  const map={"شقق":"شقة","شقه":"شقة","شق":"شقة",
+             "فلل":"فيلا","فيلا":"فيلا","فيلل":"فيلا",
+             "محلات":"محل تجاري","محل":"محل تجاري",
+             "دوبلكس":"دوبلكس","ارض":"أرض","اراضي":"أرض"};
+  for(const [k,v] of Object.entries(map)) if(t.includes(norm(k))) return v;
+  return null;
+}
+function matchUnits(){
+  return CO.units.filter(u=>{
+    if(S.area && u.area!==S.area) return false;
+    if(S.unitType && !u.type.includes(S.unitType.replace("ة","").slice(0,3))) return false;
+    return true;
+  });
+}
+function unitLine(u){ return `${u.type} ${u.size} في ${u.area} بـ ${u.price} — ${u.down} و${u.plan}`; }
+
 function basicReply(text){
-  const has=(...w)=>{const t=norm(text);return w.some(x=>t.includes(x));};
-  const intent=detectIntent(text);
+  // ⚠️ مهم: لما بنسأل عن الاسم أو الرقم، مبنحللش النية —
+  // عميل اسمه "أحمد" كان بيتفهم إنه عايز يكلم الأستاذ أحمد وتتقفل المحادثة!
+  const collecting = (S.state==="name" || S.state==="phone");
+  const intent = collecting ? "unknown" : detectIntent(text);
+
+  if(!collecting){
+    const a=findArea(text); if(a) S.area=a;
+    const ty=findType(text); if(ty) S.unitType=ty;
+    const b=extractBudget(text); if(b) S.budget=b;
+    const ph=extractPhone(text); if(ph) S.phone=ph;
+    paintScore();
+  }
+
   if(intent==="human"){S.outcome="escalate";S.done=true;return ESCALATE;}
-  if(intent==="bye"&&S.state!=="name"&&S.state!=="phone"){S.outcome="no_booking";S.done=true;return GOODBYE;}
-  if(S.state==="listening"){
-    if(intent==="booking"){const [sv]=findService(text);if(sv)S.service=sv;
-      S.offered=nextSlots(2);S.state="slot";
-      return `متوفر عندنا ${S.offered.map(fmtSlot).join(" أو ")}. أيهم يناسبك؟`;}
-    if(intent==="price"){const [sv,pr]=findService(text);if(sv)S.service=sv;
-      if(sv&&pr)return `${sv} عندنا بـ ${pr}. تحب أحجز لك موعد؟`;
-      if(sv)return `${sv} السعر يعتمد على الحالة ويحتاج كشف أول. الكشف مجاني. تحب أحجز لك؟`;
-      return "عندنا تنظيف وحشو وتبييض وزراعة وتقويم. أي خدمة تسأل عنها؟";}
-    if(intent==="hours")return `دوامنا ${CLINIC.hours}. تحب أحجز لك موعد؟`;
-    if(intent==="location")return `موقعنا في ${CLINIC.address}. تحب أحجز لك موعد؟`;
-    if(intent==="cancel"){S.outcome="escalate";S.done=true;return "للإلغاء أو التأجيل بحوّلك لأحد الفريق، بيتواصلون معك.";}
-    if(++S.miss>=2){S.outcome="escalate";S.done=true;return "عشان أخدمك أفضل، بسجّل رقمك ويتواصل معك أحد الفريق.";}
-    return "عذراً، ما وصلني كلامك زين. تحب تحجز موعد ولا تسأل عن خدمة؟";
-  }
-  if(S.state==="slot"){
-    let c=null;
-    if(has("الاول","اول","الاولي"))c=S.offered[0];
-    else if(has("الثاني","التاني","الثانيه"))c=S.offered[1]||null;
-    else if(has("تمام","زين","مناسب","اوك","نعم","ماشي","طيب"))c=S.offered[0];
-    if(!c){
-      if(intent==="hours")return `دوامنا ${CLINIC.hours}. نرجع للموعد — الأول ولا الثاني؟`;
-      if(intent==="location")return `موقعنا في ${CLINIC.address}. نرجع للموعد — الأول ولا الثاني؟`;
-      if(intent==="price"){const [sv,pr]=findService(text);if(sv)S.service=sv;
-        return (sv&&pr)?`${sv} بـ ${pr}. نرجع للموعد — الأول ولا الثاني؟`:"الأسعار تختلف حسب الخدمة. نرجع للموعد — الأول ولا الثاني؟";}
-      if(intent==="booking"){S.offered=nextSlots(2);
-        return `متوفر عندنا ${S.offered.map(fmtSlot).join(" أو ")}. أيهم يناسبك؟`;}
-      if(++S.miss>=2){S.outcome="escalate";S.done=true;
-        return "خلني أحوّلك لأحد الفريق عشان يخدمك بشكل أفضل. بيتواصلون معك قريب.";}
-      return "ما ضبطت. تفضل الموعد الأول ولا الثاني؟";
+  if(intent==="bye"){S.outcome="no_booking";S.done=true;return GOODBYE;}
+
+  if(S.state==="open"){
+    if(intent==="view"){ S.offered=nextSlots(2); S.state="slot";
+      return `تمام. متاح عندنا ${S.offered.map(fmtSlot).join(" أو ")}. أنهي واحد يناسب حضرتك؟`; }
+
+    // لو العميل قال ميزانيته أو منطقته أو نوع الوحدة — نرشّح على طول
+    const gotInfo = S.budget || S.area || S.unitType;
+    if(intent==="avail"||intent==="price"||intent==="install"||gotInfo){
+      const list=matchUnits();
+      if(!list.length) return "المتاح عندنا دلوقتي في التجمع ومدينة نصر والشيخ زايد. حضرتك مهتم بأنهي منطقة؟";
+      if(!S.budget && list.length>1)
+        return `عندنا ${list.length} وحدات ${S.area?("في "+S.area):""}. ميزانية حضرتك في حدود كام؟ عشان أرشحلك الأنسب.`;
+      const pick = S.budget
+        ? list.reduce((best,u)=>{
+            const p=parseInt(toEn(u.price).replace(/\D/g,""),10);
+            const bp=parseInt(toEn(best.price).replace(/\D/g,""),10);
+            return Math.abs(p-S.budget)<Math.abs(bp-S.budget)?u:best; })
+        : list[0];
+      S.state="offered";
+      return `أنسب حاجة لحضرتك: ${unitLine(pick)}. تحب تعاينها؟`;
     }
-    S.miss=0;S.slot=c;S.state="name";return "تمام. الاسم الكريم؟";
+    if(intent==="location") return `مكتبنا في ${CO.office}، ومواعيدنا ${CO.hours}. تحب تحجز معاينة؟`;
+    if(++S.miss>=2){S.outcome="escalate";S.done=true;
+      return "خليني آخد رقم حضرتك وأستاذ أحمد هيكلمك ويشوف طلبك بالظبط.";}
+    return "تحت أمر حضرتك — بتدور على شقة ولا فيلا ولا محل؟ وفي أنهي منطقة؟";
   }
+
+  if(S.state==="offered"){
+    const t=norm(text);
+    if(/ايوه|اه|تمام|ماشي|طيب|اكيد|يلا|موافق/.test(t)||intent==="view"){
+      S.offered=nextSlots(2); S.state="slot";
+      return `تمام. متاح ${S.offered.map(fmtSlot).join(" أو ")}. أنهي واحد يناسبك؟`;
+    }
+    if(intent==="price"||intent==="install"){
+      const u=matchUnits()[0]||CO.units[0];
+      return `${u.price} — ${u.down} و${u.plan}. تحب تعاينها؟`;
+    }
+    S.state="open"; return basicReply(text);
+  }
+
+  if(S.state==="slot"){
+    const t=norm(text);let c=null;
+    if(/الاول|اول|الاولي/.test(t))c=S.offered[0];
+    else if(/الثاني|التاني|التانيه/.test(t))c=S.offered[1]||null;
+    else{
+      for(const s of S.offered){
+        const parts=norm(fmtSlot(s)).split(" ").filter(p=>p.length>2);
+        if(parts.some(p=>t.includes(p))){c=s;break;}
+      }
+      if(!c&&/تمام|ماشي|ايوه|اه|اوك|طيب/.test(t))c=S.offered[0];
+    }
+    if(!c){
+      if(++S.miss>=2){S.outcome="escalate";S.done=true;
+        return "خليني آخد رقمك وأستاذ أحمد هيتواصل معاك يحدد الميعاد المناسب.";}
+      return "معلش، الميعاد الأول ولا التاني؟";
+    }
+    S.miss=0;S.slot=c;S.state="name";paintScore();
+    return "تمام، اتحجز. ممكن اسم حضرتك؟";
+  }
+
   if(S.state==="name"){
     S.name=text.trim().replace(/^(انا|أنا|اسمي|اسمى|الاسم)\s*/,"")||"غير محدد";
-    S.state="phone";return `تشرفنا ${S.name}. ورقم الجوال للتأكيد؟`;
+    S.state="phone";paintScore();
+    return `تشرفنا يا ${S.name}. ورقم الموبايل للتأكيد؟`;
   }
+
   if(S.state==="phone"){
     const p=extractPhone(text);
-    if(!p){if(++S.miss>=3)S.phone="غير محدد";else return "ما وصلني الرقم صحيح. ممكن تعيده رقم رقم؟";}
+    if(!p){ if(++S.miss>=3)S.phone="غير محدد"; else return "الرقم مش واضح، ممكن تبعته تاني؟"; }
     else S.phone=p;
-    booked.add(S.slot.toISOString().slice(0,16));S.outcome="confirmed";S.done=true;
-    return `تم الحجز ${S.name} — ${fmtSlot(S.slot)}. بيوصلك تأكيد على الجوال. في أمان الله.`;
+    S.outcome="booked";S.done=true;paintScore();
+    return `تمام يا ${S.name}. المعاينة ${fmtSlot(S.slot)} في ${CO.office}. هنبعتلك تأكيد، وأي حاجة إحنا تحت أمرك.`;
   }
   S.done=true;return GOODBYE;
 }
+
+/* ══════ ٨) كارت العميل ══════ */
 function summary(){
-  if(S.outcome==="confirmed"&&S.slot)
-    return `🦷 حجز جديد — ${CLINIC.name}\n────────────\nالاسم: ${S.name||"لم يُذكر"}\nالجوال: ${S.phone||"لم يُذكر"}\nالخدمة: ${S.service||"كشف عام"}\nالموعد: ${fmtSlot(S.slot)}\n────────────\nعبر الرد الآلي`;
-  const o=S.outcome==="escalate"?"يحتاج متابعة ⚠️":"بدون حجز";
-  return `📞 مكالمة — ${CLINIC.name}\n────────────\nالحالة: ${o}\n────────────\n`+
-    S.log.map(([w,m])=>`${w==="bot"?"الوكيل":"المتصل"}: ${m}`).join("\n");
+  const s=leadScore();
+  const tag = s==="hot"?"🔥 عميل جاد":(s==="warm"?"🟡 عميل محتمل":"⚪ استكشاف");
+  const unit = S.unitId ? (CO.units.find(u=>u.id===S.unitId)) : null;
+  const lines=[
+    `📋 عميل جديد — ${CO.name}`,
+    "────────────",
+    `التقييم: ${tag}`,
+    `الاسم: ${S.name||"لم يُذكر"}`,
+    `الموبايل: ${S.phone||"لم يُذكر"}`,
+    S.unitType?`بيدور على: ${S.unitType}`:null,
+    S.area?`المنطقة: ${S.area}`:null,
+    S.budget?`الميزانية: ${fmtMoney(S.budget)}`:null,
+    S.payment?`الدفع: ${S.payment}`:null,
+    unit?`الوحدة المهتم بيها: ${unit.id} — ${unit.type} ${unit.size}`:null,
+    S.slot?`📅 المعاينة: ${fmtSlot(S.slot)}`:null,
+    "────────────"
+  ].filter(Boolean);
+  if(S.outcome==="escalate") lines.push("⚠️ محتاج متابعة شخصية");
+  else if(!S.slot) lines.push("لم يحجز معاينة");
+  lines.push("عبر المساعد الآلي");
+  return lines.join("\n");
 }
 
 /* ══════════════════════════════════════════════
-   ٧) النطق — مع إصلاحات Chrome المعروفة
+   ٩) صوت Google (Gemini TTS)
+   ⚠️ الموبايل بيمنع الصوت المش جاي من ضغطة إصبع.
+   الحل: نفتح عنصر صوت واحد بملف صامت مع أول لمسة ونعيد استخدامه.
    ══════════════════════════════════════════════ */
-let voices=[],chosenVoice=null,speaking=false,warmed=false;
-
-function vAlert(cls,msg){
-  const a=document.getElementById("voiceAlert");
-  a.className="alert "+cls+" show"; a.innerHTML=msg;
-}
-function vAlertHide(){document.getElementById("voiceAlert").className="alert";}
-
-function loadVoices(){
-  voices=speechSynthesis.getVoices();
-  const sel=document.getElementById("voiceSel"),note=document.getElementById("voiceNote");
-  if(!voices.length){ note.textContent="جارٍ تحميل الأصوات…"; return; }
-
-  const ar=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith("ar"));
-  sel.innerHTML="";
-
-  // نعرض العربي أولاً، وبعده باقي الأصوات كخيار احتياطي
-  const list = ar.length ? ar : voices;
-  list.forEach(v=>{const o=document.createElement("option");o.value=v.name;
-    o.textContent=`${v.name} · ${v.lang}`;sel.appendChild(o);});
-
-  if(ar.length){
-    chosenVoice=ar.find(v=>v.lang.toLowerCase().includes("sa"))||ar[0];
-    note.innerHTML=`<span class="good">✓ متوفر ${ar.length} صوت عربي</span>`;
-    vAlertHide();
-  }else{
-    // مهم: منسكتش. نستخدم أي صوت موجود عشان يسمع حاجة على الأقل
-    chosenVoice=voices[0]||null;
-    note.innerHTML=`<span class="bad">لا يوجد صوت عربي على الجهاز.</span>`;
-    vAlert("warn",`النطق هيشتغل بصوت غير عربي (النطق هيبقى غريب).<br><br>
-      <b>لتركيب الصوت العربي على Windows:</b><br>
-      Settings → Time & language → Language & region → <b>Add a language</b> →
-      العربية (السعودية) → علّم على <b>Speech</b> → Install → <b>أعد تشغيل المتصفح</b>.`);
-  }
-  if(chosenVoice) sel.value=chosenVoice.name;
-}
-speechSynthesis.onvoiceschanged=loadVoices;
-loadVoices();
-setTimeout(loadVoices,300);   // Chrome أحياناً بيحمّل الأصوات متأخر
-setTimeout(loadVoices,1200);
-
-document.getElementById("voiceSel").addEventListener("change",e=>{
-  chosenVoice=voices.find(v=>v.name===e.target.value)||null;});
-
-/* Chrome بيوقف النطق بعد ~15 ثانية — الحيلة دي بتمنع ده */
-setInterval(()=>{ if(speaking && speechSynthesis.speaking && !speechSynthesis.paused){
-  speechSynthesis.pause(); speechSynthesis.resume(); } },10000);
-
-/* لازم أول نطق يكون بعد ضغطة من المستخدم، وإلا Chrome بيمنعه */
-function warmUp(){
-  unlockAudio();                 // الأهم — بيفتح قفل الصوت على الموبايل
-  if(warmed) return; warmed=true;
-  try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); }catch(e){}
-}
-// أي لمسة في أي مكان بتفتح قفل الصوت — ضمان إضافي للموبايل
-["pointerdown","touchstart","click"].forEach(ev=>
-  document.addEventListener(ev, unlockAudio, {once:false, passive:true}));
-
-/* ══════════════════════════════════════════════
-   صوت Google الطبيعي (Gemini TTS)
-
-   ⚠️ أهم نقطة على الآيفون/الموبايل:
-   المتصفح بيمنع تشغيل أي صوت مش جاي مباشرة من ضغطة إصبع.
-   وردنا بييجي بعد ثانيتين من السيرفر → الضغطة بتكون "خلصت" → الصوت يتمنع.
-   الحل: نجهّز عنصر صوت واحد ونفتحه بصوت صامت مع أول ضغطة،
-   وبعدها نعيد استخدام نفس العنصر — المتصفح بيفضل فاكر إنه مسموح.
-   ══════════════════════════════════════════════ */
-let audioEl=null, audioUnlocked=false, curAudio=null;
+let audioEl=null,audioUnlocked=false,curAudio=null,speaking=false,warmed=false;
+let voices=[],chosenVoice=null;
 
 function getAudioEl(){
-  if(!audioEl){
-    audioEl=new Audio();
-    audioEl.setAttribute("playsinline","");
-    audioEl.preload="auto";
-  }
+  if(!audioEl){audioEl=new Audio();audioEl.setAttribute("playsinline","");audioEl.preload="auto";}
   return audioEl;
 }
-
 function unlockAudio(){
-  if(audioUnlocked) return;
+  if(audioUnlocked)return;
   const a=getAudioEl();
-  // ملف WAV صامت صغير — بيفتح القفل من غير ما المستخدم يسمع حاجة
   a.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQAAAAA=";
   a.volume=0;
   const p=a.play();
-  if(p && p.then) p.then(()=>{audioUnlocked=true;a.volume=1;}).catch(()=>{});
-  else { audioUnlocked=true; a.volume=1; }
+  if(p&&p.then)p.then(()=>{audioUnlocked=true;a.volume=1;}).catch(()=>{});
+  else{audioUnlocked=true;a.volume=1;}
 }
+["pointerdown","touchstart","click"].forEach(ev=>
+  document.addEventListener(ev,unlockAudio,{passive:true}));
 
-// Gemini بيرجع صوت خام PCM — لازم نلبسه رأس WAV عشان المتصفح يشغّله
-function pcmToWavBytes(pcm, rate=24000){
-  const size=pcm.length, buf=new ArrayBuffer(44+size), dv=new DataView(buf);
+function warmUp(){
+  unlockAudio();
+  if(warmed)return;warmed=true;
+  try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;speechSynthesis.speak(u);}catch(e){}
+}
+function pcmToWavBytes(pcm,rate=24000){
+  const size=pcm.length,buf=new ArrayBuffer(44+size),dv=new DataView(buf);
   const put=(o,s)=>{for(let i=0;i<s.length;i++)dv.setUint8(o+i,s.charCodeAt(i));};
-  put(0,"RIFF"); dv.setUint32(4,36+size,true); put(8,"WAVE");
-  put(12,"fmt "); dv.setUint32(16,16,true); dv.setUint16(20,1,true);
-  dv.setUint16(22,1,true); dv.setUint32(24,rate,true);
-  dv.setUint32(28,rate*2,true); dv.setUint16(32,2,true); dv.setUint16(34,16,true);
-  put(36,"data"); dv.setUint32(40,size,true);
+  put(0,"RIFF");dv.setUint32(4,36+size,true);put(8,"WAVE");
+  put(12,"fmt ");dv.setUint32(16,16,true);dv.setUint16(20,1,true);
+  dv.setUint16(22,1,true);dv.setUint32(24,rate,true);
+  dv.setUint32(28,rate*2,true);dv.setUint16(32,2,true);dv.setUint16(34,16,true);
+  put(36,"data");dv.setUint32(40,size,true);
   new Uint8Array(buf,44).set(pcm);
   return new Uint8Array(buf);
 }
-function pcmToWav(pcm, rate=24000){
-  return new Blob([pcmToWavBytes(pcm,rate)],{type:"audio/wav"});
-}
+function pcmToWav(pcm,rate=24000){return new Blob([pcmToWavBytes(pcm,rate)],{type:"audio/wav"});}
 
 async function speakGemini(text){
   const key=document.getElementById("key").value.trim();
-  if(!key) throw new Error("مفيش مفتاح");
+  if(!key)throw new Error("مفيش مفتاح");
   const voice=document.getElementById("gVoiceSel").value;
-
   const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key="+encodeURIComponent(key),
-    {method:"POST",headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({
-       contents:[{parts:[{text:"تحدث بلهجة سعودية بنبرة موظفة استقبال ودودة ومهنية: "+text}]}],
-       generationConfig:{responseModalities:["AUDIO"],
-         speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:voice}}}}
-     })});
+    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      contents:[{parts:[{text:"اقرأ النص ده بلهجة مصرية طبيعية بنبرة موظف مبيعات ودود ومهني: "+text}]}],
+      generationConfig:{responseModalities:["AUDIO"],
+        speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:voice}}}}})});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
-
   const j=await r.json();
   const part=j.candidates?.[0]?.content?.parts?.find(p=>p.inlineData);
-  if(!part) throw new Error("مفيش صوت في الرد");
-
-  const b64=part.inlineData.data;
+  if(!part)throw new Error("مفيش صوت في الرد");
   const mime=part.inlineData.mimeType||"";
   const rate=parseInt((mime.match(/rate=(\d+)/)||[])[1]||"24000",10);
-
-  const bin=atob(b64), bytes=new Uint8Array(bin.length);
-  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
-
+  const bin=atob(part.inlineData.data),bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
   const url=URL.createObjectURL(pcmToWav(bytes,rate));
   return new Promise((res,rej)=>{
-    // نعيد استخدام نفس العنصر المفتوح — ده اللي بيخلي الصوت يشتغل على الآيفون
     const a=getAudioEl();
-    a.onended=null; a.onerror=null;
-    a.pause();
-    a.src=url; a.volume=1; curAudio=a;
+    a.onended=null;a.onerror=null;a.pause();
+    a.src=url;a.volume=1;curAudio=a;
     a.onended=()=>{URL.revokeObjectURL(url);res();};
     a.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("فشل تشغيل الصوت"));};
     const p=a.play();
-    if(p&&p.catch) p.catch(e=>{
-      URL.revokeObjectURL(url);
-      rej(new Error("المتصفح منع الصوت — دوس على الشاشة مرة واحدة وجرّب تاني"));
-    });
+    if(p&&p.catch)p.catch(()=>{URL.revokeObjectURL(url);
+      rej(new Error("المتصفح منع الصوت — دوس على الشاشة وجرّب تاني"));});
   });
 }
-
 function speak(text){
   const engine=document.getElementById("engineSel").value;
   const key=document.getElementById("key").value.trim();
-  if(engine==="gemini" && key.length>10){
-    speaking=true; setMic("spk","يتحدث الآن…");
-    return speakGemini(text)
-      .then(()=>{speaking=false;})
-      .catch(e=>{
-        speaking=false;
-        // لو المتصفح منع الصوت، صوت الويندوز كمان هيتمنع — منرجعش له
-        if(/منع الصوت|NotAllowed/i.test(e.message)){
-          vAlert("err","🔇 المتصفح منع الصوت. دوس على أي مكان في الشاشة مرة واحدة، وبعدين دوس 🔊 جنب الرد.");
-          return;
-        }
-        vAlert("warn","صوت Google فشل ("+e.message+") — رجعت لصوت الويندوز.");
-        return speakBrowser(text);
-      });
+  if(engine==="gemini"&&key.length>10){
+    speaking=true;setMic("spk","بيتكلم…");
+    return speakGemini(text).then(()=>{speaking=false;}).catch(e=>{
+      speaking=false;
+      if(/منع الصوت|NotAllowed/i.test(e.message)){
+        vAlert("err","🔇 المتصفح منع الصوت. دوس على أي مكان في الشاشة، وبعدين دوس 🔊 جنب الرد.");
+        return;
+      }
+      vAlert("warn","صوت Google فشل ("+e.message+") — رجعت لصوت الجهاز.");
+      return speakBrowser(text);
+    });
   }
   return speakBrowser(text);
 }
-
 function speakBrowser(text){
   return new Promise(res=>{
     if(!("speechSynthesis" in window)){res();return;}
     speechSynthesis.cancel();
-    // Chrome بيبلع النطق لو اتنادى فوراً بعد cancel — تأخير بسيط بيحل ده
     setTimeout(()=>{
       const u=new SpeechSynthesisUtterance(text);
       if(chosenVoice)u.voice=chosenVoice;
-      u.lang=chosenVoice?chosenVoice.lang:"ar-SA";
-      u.rate=1;u.pitch=1;u.volume=1;
-      let ended=false;
-      const done=()=>{if(ended)return;ended=true;speaking=false;res();};
-      u.onend=done;
-      u.onerror=e=>{ if(e.error!=="interrupted"&&e.error!=="canceled")
-        vAlert("warn","⚠️ النطق فشل: "+e.error); done(); };
-      speaking=true;setMic("spk","يتحدث الآن…");
+      u.lang=chosenVoice?chosenVoice.lang:"ar-EG";u.rate=1;u.volume=1;
+      let ended=false;const done=()=>{if(ended)return;ended=true;speaking=false;res();};
+      u.onend=done;u.onerror=e=>{if(e.error!=="interrupted"&&e.error!=="canceled")
+        vAlert("warn","النطق فشل: "+e.error);done();};
+      speaking=true;setMic("spk","بيتكلم…");
       speechSynthesis.speak(u);
-      // أمان: لو ملوش رد خالص، منعلقش المكالمة
-      setTimeout(()=>{ if(!ended){ done(); } }, Math.max(4000, text.length*130));
+      setTimeout(()=>{if(!ended)done();},Math.max(4000,text.length*130));
     },90);
   });
 }
+function vAlert(cls,msg){const a=document.getElementById("voiceAlert");a.className="alert "+cls+" show";a.innerHTML=msg;}
+function vAlertHide(){document.getElementById("voiceAlert").className="alert";}
+function loadVoices(){
+  voices=speechSynthesis.getVoices();
+  const sel=document.getElementById("voiceSel");
+  if(!voices.length)return;
+  const ar=voices.filter(v=>v.lang&&v.lang.toLowerCase().startsWith("ar"));
+  sel.innerHTML="";
+  (ar.length?ar:voices).forEach(v=>{const o=document.createElement("option");
+    o.value=v.name;o.textContent=`${v.name} · ${v.lang}`;sel.appendChild(o);});
+  chosenVoice=ar.find(v=>v.lang.toLowerCase().includes("eg"))||ar[0]||voices[0]||null;
+  if(chosenVoice)sel.value=chosenVoice.name;
+}
+speechSynthesis.onvoiceschanged=loadVoices;loadVoices();
+setTimeout(loadVoices,400);setTimeout(loadVoices,1500);
+document.getElementById("voiceSel").addEventListener("change",e=>{
+  chosenVoice=voices.find(v=>v.name===e.target.value)||null;});
+setInterval(()=>{if(speaking&&speechSynthesis.speaking&&!speechSynthesis.paused){
+  speechSynthesis.pause();speechSynthesis.resume();}},10000);
 
 function onEngineChange(){
-  const g = document.getElementById("engineSel").value==="gemini";
-  document.getElementById("gVoiceSel").style.display = g?"block":"none";
-  document.getElementById("voiceSel").style.display  = g?"none":"block";
-  document.getElementById("voiceNote").innerHTML = g
-    ? "صوت Google أفضل بكثير وبيدعم العربي بشكل طبيعي."
-    : "صوت الويندوز آلي — للطوارئ بس.";
+  const g=document.getElementById("engineSel").value==="gemini";
+  document.getElementById("gVoiceSel").style.display=g?"block":"none";
+  document.getElementById("voiceSel").style.display=g?"none":"block";
+  document.getElementById("voiceNote").innerHTML=g
+    ?"صوت Google طبيعي وبيدعم المصري كويس."
+    :"صوت الجهاز آلي — للطوارئ بس.";
   vAlertHide();
 }
-
 async function testVoice(){
-  warmUp(); vAlertHide();
-  const t="أهلاً وسهلاً، عيادة الابتسامة. كيف أقدر أساعدك اليوم؟";
+  warmUp();vAlertHide();
+  const t="أهلاً بحضرتك في الهشام للعقارات. تحت أمرك، بتدور على إيه؟";
   const engine=document.getElementById("engineSel").value;
   const key=document.getElementById("key").value.trim();
-
   if(engine==="gemini"){
-    if(key.length<10){ vAlert("err","محتاج تحط مفتاح Google الأول."); return; }
-    vAlert("warn","⏳ بيجهّز الصوت… (٣-٥ ثواني أول مرة)");
-    try{
-      await speakGemini(t);
-      vAlert("ok","✅ اشتغل! ده صوت Google الطبيعي.");
-    }catch(e){ vAlert("err","فشل: "+e.message); }
+    if(key.length<10){vAlert("err","محتاج تحط مفتاح Google الأول.");return;}
+    vAlert("warn","⏳ بيجهّز الصوت…");
+    try{await speakGemini(t);vAlert("ok","✅ اشتغل! ده صوت Google الطبيعي.");}
+    catch(e){vAlert("err","فشل: "+e.message);}
     return;
   }
-
-  if(!voices.length) loadVoices();
-  if(!chosenVoice){ vAlert("err","مفيش أي صوت متاح على الجهاز."); return; }
-  speechSynthesis.cancel();
-  setTimeout(()=>{
-    const u=new SpeechSynthesisUtterance(t);
-    u.voice=chosenVoice;u.lang=chosenVoice.lang;u.volume=1;
-    u.onstart=()=>vAlert("ok","🔊 بينطق بصوت: "+chosenVoice.name);
-    u.onerror=e=>vAlert("err","فشل النطق: "+e.error);
-    speechSynthesis.speak(u);
-    setTimeout(()=>{ if(!speechSynthesis.speaking)
-      vAlert("err","مفيش صوت طلع. تأكد إن صوت الجهاز مفتوح والتاب مش متكتّم."); },700);
-  },80);
+  if(!voices.length)loadVoices();
+  if(!chosenVoice){vAlert("err","مفيش صوت متاح على الجهاز.");return;}
+  await speakBrowser(t);
+  vAlert("ok","نطق بصوت: "+chosenVoice.name);
 }
 
-/* ══════════════════════════════════════════════
-   ٨-أ) تسجيل عالمي — شغّال على الآيفون والأندرويد والكمبيوتر
-   بنسجّل الصوت خام ونبعته لـ Gemini يفهمه.
-   ده بيتخطى الخاصية اللي آبل مانعاها في المتصفح.
-   ══════════════════════════════════════════════ */
-let micStream=null, audioCtx=null, srcNode=null, procNode=null;
-let pcmChunks=[], recording=false, ctxRate=48000;
+/* ══════ ١٠) التسجيل (شغّال على الآيفون) ══════ */
+let micStream=null,audioCtx=null,srcNode=null,procNode=null;
+let pcmChunks=[],recording=false,ctxRate=48000;
 
 async function startRecording(){
-  micStream = await navigator.mediaDevices.getUserMedia({audio:{
-    echoCancellation:true, noiseSuppression:true, autoGainControl:true}});
-  audioCtx = new (window.AudioContext||window.webkitAudioContext)();
-  if(audioCtx.state==="suspended") await audioCtx.resume();
-  ctxRate = audioCtx.sampleRate;
-  srcNode = audioCtx.createMediaStreamSource(micStream);
-  procNode = audioCtx.createScriptProcessor(4096,1,1);
+  micStream=await navigator.mediaDevices.getUserMedia({audio:{
+    echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  audioCtx=new (window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")await audioCtx.resume();
+  ctxRate=audioCtx.sampleRate;
+  srcNode=audioCtx.createMediaStreamSource(micStream);
+  procNode=audioCtx.createScriptProcessor(4096,1,1);
   pcmChunks=[];
-  procNode.onaudioprocess = e => {
-    if(!recording) return;
-    pcmChunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));
-  };
-  srcNode.connect(procNode);
-  procNode.connect(audioCtx.destination);
-  recording = true;
+  procNode.onaudioprocess=e=>{if(recording)pcmChunks.push(new Float32Array(e.inputBuffer.getChannelData(0)));};
+  srcNode.connect(procNode);procNode.connect(audioCtx.destination);
+  recording=true;
 }
-
 function stopRecording(){
-  recording = false;
-  try{ if(procNode){procNode.disconnect(); procNode.onaudioprocess=null;} }catch(e){}
-  try{ if(srcNode) srcNode.disconnect(); }catch(e){}
-  try{ if(micStream) micStream.getTracks().forEach(t=>t.stop()); }catch(e){}
-  try{ if(audioCtx) audioCtx.close(); }catch(e){}
-
-  // دمج + خفض معدل العينة لـ 16k (كفاية للكلام وبيقلل الحجم)
-  let len=0; pcmChunks.forEach(c=>len+=c.length);
-  const all=new Float32Array(len); let off=0;
-  pcmChunks.forEach(c=>{all.set(c,off); off+=c.length;});
-
-  const target=16000, ratio=ctxRate/target;
-  const outLen=Math.floor(all.length/ratio);
+  recording=false;
+  try{if(procNode){procNode.disconnect();procNode.onaudioprocess=null;}}catch(e){}
+  try{if(srcNode)srcNode.disconnect();}catch(e){}
+  try{if(micStream)micStream.getTracks().forEach(t=>t.stop());}catch(e){}
+  try{if(audioCtx)audioCtx.close();}catch(e){}
+  let len=0;pcmChunks.forEach(c=>len+=c.length);
+  const all=new Float32Array(len);let off=0;
+  pcmChunks.forEach(c=>{all.set(c,off);off+=c.length;});
+  const target=16000,ratio=ctxRate/target,outLen=Math.floor(all.length/ratio);
   const pcm16=new Int16Array(outLen);
-  for(let i=0;i<outLen;i++){
-    const s=Math.max(-1,Math.min(1,all[Math.floor(i*ratio)]||0));
-    pcm16[i]= s<0 ? s*0x8000 : s*0x7FFF;
-  }
-  return {bytes:new Uint8Array(pcm16.buffer), rate:target, seconds:outLen/target};
+  for(let i=0;i<outLen;i++){const s=Math.max(-1,Math.min(1,all[Math.floor(i*ratio)]||0));
+    pcm16[i]=s<0?s*0x8000:s*0x7FFF;}
+  return {bytes:new Uint8Array(pcm16.buffer),rate:target,seconds:outLen/target};
 }
-
-function bytesToB64(bytes){
-  let s=""; const chunk=8192;
-  for(let i=0;i<bytes.length;i+=chunk)
-    s+=String.fromCharCode.apply(null,bytes.subarray(i,i+chunk));
-  return btoa(s);
-}
-
-async function geminiTranscribe(rawPcm, rate=16000){
+function bytesToB64(b){let s="";const c=8192;
+  for(let i=0;i<b.length;i+=c)s+=String.fromCharCode.apply(null,b.subarray(i,i+c));return btoa(s);}
+async function geminiTranscribe(rawPcm,rate=16000){
   const key=document.getElementById("key").value.trim();
-  if(key.length<10) throw new Error("محتاج مفتاح Google للتسجيل على الآيفون");
-  // مهم: Gemini محتاج ملف WAV كامل مش بيانات خام
-  const b64 = bytesToB64(pcmToWavBytes(rawPcm, rate));
+  if(key.length<10)throw new Error("محتاج مفتاح Google عشان التسجيل");
+  const b64=bytesToB64(pcmToWavBytes(rawPcm,rate));
   const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key),
-    {method:"POST",headers:{"Content-Type":"application/json"},
-     body:JSON.stringify({contents:[{parts:[
-        {text:"اكتب نص الكلام العربي في هذا التسجيل حرفياً فقط، بدون أي شرح أو علامات إضافية. إذا لم يوجد كلام واضح اكتب: لا_يوجد"},
-        {inline_data:{mime_type:"audio/wav", data:b64}}
-     ]}], generationConfig:{temperature:0, maxOutputTokens:200}})});
+    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      contents:[{parts:[
+        {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس، من غير أي شرح. لو مفيش كلام واضح اكتب: لا_يوجد"},
+        {inline_data:{mime_type:"audio/wav",data:b64}}]}],
+      generationConfig:{temperature:0,maxOutputTokens:200}})});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
   const j=await r.json();
   const t=(j.candidates?.[0]?.content?.parts?.[0]?.text||"").trim();
-  if(!t || t.includes("لا_يوجد")) throw new Error("ما سمعت كلام واضح");
+  if(!t||t.includes("لا_يوجد"))throw new Error("مسمعتش كلام واضح");
   return t;
 }
 
-/* ══════ ٨-ب) الاستماع عبر المتصفح (كمبيوتر/أندرويد) ══════ */
+/* ══════ ١١) الاستماع المباشر ══════ */
 const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
 let rec=null,listening=false;
-
 function checkSecure(){
   const b=document.getElementById("secBanner");
   if(location.protocol==="file:"){
     b.className="secbanner show";
-    b.innerHTML=`<b>⚠️ الميكروفون لن يعمل من الملف المحلي.</b><br>
-      Chrome يمنع الميكروفون على <code>file://</code> — لازم رابط <code>https</code>.<br>
-      ارفع الملف على GitHub Pages وافتحه من هناك.`;
+    b.innerHTML=`<b>⚠️ الميكروفون مش هيشتغل من الملف المحلي.</b> لازم رابط <code>https</code>.`;
     return false;
   }
   if(!SR){
-    // مش مشكلة — بنستخدم مسار التسجيل + Gemini، وشغّال على الآيفون عادي
     b.className="secbanner show";
-    b.innerHTML=`<b>وضع التسجيل مفعّل</b> — جهازك ما يدعم التعرف المباشر، فبنسجّل صوتك ونحلله.<br>
-      <b>اضغط الميكروفون، اتكلم، ثم اضغط مرة ثانية.</b> (يحتاج مفتاح Google)`;
+    b.innerHTML=`<b>وضع التسجيل مفعّل</b> — اضغط الميكروفون، اتكلم، واضغط تاني لما تخلص. (محتاج مفتاح Google)`;
     return true;
   }
   return true;
@@ -758,25 +817,18 @@ function checkSecure(){
 function initRec(){
   if(!SR)return null;
   const r=new SR();
-  r.lang="ar-SA";r.continuous=false;r.interimResults=true;r.maxAlternatives=1;
-  r.onstart=()=>{listening=true;setMic("rec","أستمع إليك… تفضل");};
-  r.onresult=e=>{
-    let fin="",int="";
-    for(let i=e.resultIndex;i<e.results.length;i++){
-      const t=e.results[i][0].transcript;
+  r.lang="ar-EG";r.continuous=false;r.interimResults=true;r.maxAlternatives=1;
+  r.onstart=()=>{listening=true;setMic("rec","بسمعك… اتفضل");};
+  r.onresult=e=>{let fin="",int="";
+    for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;
       if(e.results[i].isFinal)fin+=t;else int+=t;}
     if(int)setMic("rec",int);
-    if(fin.trim()){listening=false;r.stop();handleVoice(fin.trim());}
-  };
-  r.onerror=e=>{
-    listening=false;setMic("","اضغط للتحدث");
-    const m={"not-allowed":"تم رفض الوصول للميكروفون. اضغط القفل 🔒 جنب الرابط واسمح بالميكروفون.",
-      "no-speech":"لم أسمع صوتاً. جرّب مرة أخرى واقترب من الميكروفون.",
-      "audio-capture":"لا يوجد ميكروفون متصل.",
-      "network":"مشكلة اتصال — التعرف على الصوت يحتاج إنترنت.",
-      "service-not-allowed":"المتصفح يمنع التعرف على الصوت. استخدم Chrome عبر https."};
-    showErr("🎙 "+(m[e.error]||e.error));
-  };
+    if(fin.trim()){listening=false;r.stop();handleVoice(fin.trim());}};
+  r.onerror=e=>{listening=false;setMic("","اضغط للتحدث");
+    const m={"not-allowed":"مرفوض الوصول للميكروفون. دوس القفل 🔒 جنب الرابط واسمح.",
+      "no-speech":"مسمعتش صوت. جرّب تاني.","audio-capture":"مفيش ميكروفون متوصل.",
+      "network":"مشكلة اتصال بالإنترنت.","service-not-allowed":"المتصفح مانع التعرف على الصوت."};
+    showErr("🎙 "+(m[e.error]||e.error));};
   r.onend=()=>{listening=false;if(!speaking)setMic("","اضغط للتحدث");};
   return r;
 }
@@ -786,42 +838,27 @@ function setMic(cls,status){
   document.getElementById("status").textContent=status;
 }
 async function toggleMic(){
-  warmUp();                     // مهم: بيفعّل النطق مع أول ضغطة
-
-  // ── مسار التسجيل (الآيفون وأي متصفح مبيدعمش التعرف المباشر) ──
+  warmUp();
   if(!SR){
-    if(location.protocol==="file:"){ checkSecure(); return; }
+    if(location.protocol==="file:"){checkSecure();return;}
     if(recording){
       setMic("spk","بيحلّل كلامك…");
       const {bytes,rate,seconds}=stopRecording();
-      if(seconds<0.4){ setMic("","اضغط للتحدث"); showErr("التسجيل قصير جداً — اضغط واتكلم ثم اضغط للإيقاف."); return; }
-      try{
-        const text=await geminiTranscribe(bytes,rate);
-        setMic("","اضغط للتحدث");
-        await handleVoice(text);
-      }catch(e){
-        setMic("","اضغط للتحدث");
-        showErr("🎙 "+e.message);
-      }
+      if(seconds<0.4){setMic("","اضغط للتحدث");showErr("التسجيل قصير — اضغط، اتكلم، وبعدين اضغط للإيقاف.");return;}
+      try{const text=await geminiTranscribe(bytes,rate);setMic("","اضغط للتحدث");await handleVoice(text);}
+      catch(e){setMic("","اضغط للتحدث");showErr("🎙 "+e.message);}
       return;
     }
     if(S.done)reset();
     hideErr();
-    try{
-      await startRecording();
-      setMic("rec","بسجّل… اضغط تاني لما تخلص");
-    }catch(e){
-      showErr("🎙 مش قادر أفتح الميكروفون: "+e.message+" — اسمح للصفحة تستخدم الميكروفون.");
-    }
+    try{await startRecording();setMic("rec","بسجّل… اضغط تاني لما تخلص");}
+    catch(e){showErr("🎙 مش قادر أفتح الميكروفون: "+e.message);}
     return;
   }
-
-  // ── المسار العادي (كمبيوتر / أندرويد) ──
   if(!checkSecure())return;
   if(listening){rec.stop();listening=false;setMic("","اضغط للتحدث");return;}
   if(S.done)reset();
-  hideErr();
-  rec=rec||initRec();
+  hideErr();rec=rec||initRec();
   try{rec.start();}catch(e){}
 }
 function stopAll(){
@@ -833,17 +870,15 @@ function stopAll(){
 }
 async function handleVoice(t){document.getElementById("inp").value=t;await send(true);}
 
-/* ══════ ٩) الواجهة ══════ */
+/* ══════ ١٢) الواجهة ══════ */
 const chat=document.getElementById("chat");
 function addRow(who,text){
   const r=document.createElement("div");r.className="row"+(who==="u"?" me":"");
-  const p=document.createElement("div");p.className="pic "+who;p.textContent=who==="b"?"🦷":"🧑";
+  const p=document.createElement("div");p.className="pic "+who;p.textContent=who==="b"?"🏢":"🧑";
   const b=document.createElement("div");b.className="bubble "+who;b.textContent=text;
   r.appendChild(p);r.appendChild(b);
-  // زرار إعادة النطق على كل رد — عشان تقدر تسمعه تاني في أي وقت
   if(who==="b"){
-    const s=document.createElement("button");
-    s.textContent="🔊"; s.title="اسمع الرد";
+    const s=document.createElement("button");s.textContent="🔊";s.title="اسمع الرد";
     s.style.cssText="background:none;border:0;color:#64748b;font-size:15px;cursor:pointer;padding:4px;align-self:flex-end";
     s.onclick=()=>{warmUp();speak(text);};
     r.appendChild(s);
@@ -854,15 +889,14 @@ function bot(t){addRow("b",t);S.log.push(["bot",t]);}
 function usr(t){addRow("u",t);S.log.push(["usr",t]);}
 function thinking(){
   const r=document.createElement("div");r.className="row";
-  r.innerHTML='<div class="pic b">🦷</div><div class="bubble b" style="padding:0"><div class="dots"><i></i><i></i><i></i></div></div>';
+  r.innerHTML='<div class="pic b">🏢</div><div class="bubble b" style="padding:0"><div class="dots"><i></i><i></i><i></i></div></div>';
   chat.appendChild(r);chat.scrollTop=chat.scrollHeight;return r;
 }
 function showErr(m){const e=document.getElementById("err");e.textContent=m;e.className="alert err show";}
 function hideErr(){document.getElementById("err").className="alert err";}
 function setMode(){
   const k=document.getElementById("key").value.trim(),has=k.length>10;
-  const p=document.getElementById("pill");
-  p.className="pill"+(has?" on":"");
+  document.getElementById("pill").className="pill"+(has?" on":"");
   document.getElementById("pillTxt").textContent=has
     ?"ذكاء اصطناعي · "+(keyProvider(k)==="openai"?"OpenAI":"Google"):"وضع تجريبي";
   try{localStorage.setItem("vk",k);}catch(e){}
@@ -882,30 +916,25 @@ async function send(fromVoice=false){
   }else{await new Promise(r=>setTimeout(r,220));reply=basicReply(v);bot(reply);}
   btn.disabled=false;
   if(S.done)document.getElementById("wa").textContent=summary();
-
-  // ينطق دائماً — سواء كتبت أو اتكلمت
+  paintScore();
   await speak(reply);
-
   if(fromVoice){
-    if(S.done){endNote();setMic("","انتهت المكالمة — اضغط ↻ لواحدة جديدة");}
+    if(S.done){endNote();setMic("","خلصت — اضغط ↻ لمحادثة جديدة");}
     else if(document.getElementById("auto").checked)
-      setTimeout(()=>{if(!S.done&&!listening)toggleMic();},350);
+      setTimeout(()=>{if(!S.done&&!listening&&!recording)toggleMic();},350);
     else setMic("","اضغط للتحدث");
-  }else{
-    setMic("","اضغط للتحدث");
-    if(S.done)endNote();
-  }
+  }else{setMic("","اضغط للتحدث");if(S.done)endNote();}
   i.focus();
 }
 function endNote(){
   if(chat.querySelector(".note-sys"))return;
   const d=document.createElement("div");d.className="note-sys";
-  d.textContent="انتهت المكالمة — اضغط ↻ لبدء مكالمة جديدة";
+  d.textContent="انتهت المحادثة — اضغط ↻ لواحدة جديدة";
   chat.appendChild(d);chat.scrollTop=chat.scrollHeight;
 }
 function quick(el){warmUp();document.getElementById("inp").value=el.textContent;send(false);}
 document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter")send(false);});
-document.getElementById("clinicName").textContent=CLINIC.name;
+document.getElementById("coName").textContent=CO.name;
 try{const k=localStorage.getItem("vk");if(k)document.getElementById("key").value=k;}catch(e){}
 checkSecure();setMode();onEngineChange();reset();
 </script>
