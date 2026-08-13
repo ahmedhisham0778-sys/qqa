@@ -479,12 +479,44 @@ setInterval(()=>{ if(speaking && speechSynthesis.speaking && !speechSynthesis.pa
 
 /* لازم أول نطق يكون بعد ضغطة من المستخدم، وإلا Chrome بيمنعه */
 function warmUp(){
+  unlockAudio();                 // الأهم — بيفتح قفل الصوت على الموبايل
   if(warmed) return; warmed=true;
   try{ const u=new SpeechSynthesisUtterance(" "); u.volume=0; speechSynthesis.speak(u); }catch(e){}
 }
+// أي لمسة في أي مكان بتفتح قفل الصوت — ضمان إضافي للموبايل
+["pointerdown","touchstart","click"].forEach(ev=>
+  document.addEventListener(ev, unlockAudio, {once:false, passive:true}));
 
-/* ── صوت Google الطبيعي (Gemini TTS) ── */
-let curAudio=null;
+/* ══════════════════════════════════════════════
+   صوت Google الطبيعي (Gemini TTS)
+
+   ⚠️ أهم نقطة على الآيفون/الموبايل:
+   المتصفح بيمنع تشغيل أي صوت مش جاي مباشرة من ضغطة إصبع.
+   وردنا بييجي بعد ثانيتين من السيرفر → الضغطة بتكون "خلصت" → الصوت يتمنع.
+   الحل: نجهّز عنصر صوت واحد ونفتحه بصوت صامت مع أول ضغطة،
+   وبعدها نعيد استخدام نفس العنصر — المتصفح بيفضل فاكر إنه مسموح.
+   ══════════════════════════════════════════════ */
+let audioEl=null, audioUnlocked=false, curAudio=null;
+
+function getAudioEl(){
+  if(!audioEl){
+    audioEl=new Audio();
+    audioEl.setAttribute("playsinline","");
+    audioEl.preload="auto";
+  }
+  return audioEl;
+}
+
+function unlockAudio(){
+  if(audioUnlocked) return;
+  const a=getAudioEl();
+  // ملف WAV صامت صغير — بيفتح القفل من غير ما المستخدم يسمع حاجة
+  a.src="data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAgD4AAAB9AAACABAAZGF0YQAAAAA=";
+  a.volume=0;
+  const p=a.play();
+  if(p && p.then) p.then(()=>{audioUnlocked=true;a.volume=1;}).catch(()=>{});
+  else { audioUnlocked=true; a.volume=1; }
+}
 
 // Gemini بيرجع صوت خام PCM — لازم نلبسه رأس WAV عشان المتصفح يشغّله
 function pcmToWavBytes(pcm, rate=24000){
@@ -529,11 +561,18 @@ async function speakGemini(text){
 
   const url=URL.createObjectURL(pcmToWav(bytes,rate));
   return new Promise((res,rej)=>{
-    if(curAudio){try{curAudio.pause();}catch(e){}}
-    const a=new Audio(url); curAudio=a;
+    // نعيد استخدام نفس العنصر المفتوح — ده اللي بيخلي الصوت يشتغل على الآيفون
+    const a=getAudioEl();
+    a.onended=null; a.onerror=null;
+    a.pause();
+    a.src=url; a.volume=1; curAudio=a;
     a.onended=()=>{URL.revokeObjectURL(url);res();};
     a.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("فشل تشغيل الصوت"));};
-    a.play().catch(rej);
+    const p=a.play();
+    if(p&&p.catch) p.catch(e=>{
+      URL.revokeObjectURL(url);
+      rej(new Error("المتصفح منع الصوت — دوس على الشاشة مرة واحدة وجرّب تاني"));
+    });
   });
 }
 
@@ -545,8 +584,13 @@ function speak(text){
     return speakGemini(text)
       .then(()=>{speaking=false;})
       .catch(e=>{
-        vAlert("warn","صوت Google فشل ("+e.message+") — رجعت لصوت الويندوز.");
         speaking=false;
+        // لو المتصفح منع الصوت، صوت الويندوز كمان هيتمنع — منرجعش له
+        if(/منع الصوت|NotAllowed/i.test(e.message)){
+          vAlert("err","🔇 المتصفح منع الصوت. دوس على أي مكان في الشاشة مرة واحدة، وبعدين دوس 🔊 جنب الرد.");
+          return;
+        }
+        vAlert("warn","صوت Google فشل ("+e.message+") — رجعت لصوت الويندوز.");
         return speakBrowser(text);
       });
   }
