@@ -636,16 +636,49 @@ function pcmToWavBytes(pcm,rate=24000){
 }
 function pcmToWav(pcm,rate=24000){return new Blob([pcmToWavBytes(pcm,rate)],{type:"audio/wav"});}
 
-async function speakGemini(text){
-  const key=document.getElementById("key").value.trim();
-  if(!key)throw new Error("مفيش مفتاح");
-  const voice=document.getElementById("gVoiceSel").value;
+/* ── إدارة الحد المجاني: ١٠ طلبات في الدقيقة ──
+   ٣ حمايات: (١) ذاكرة للردود المتكررة  (٢) عدّاد يمنع تجاوز الحد
+   (٣) إعادة محاولة تلقائية لو رفض                                  */
+const ttsCache=new Map();        // النص → رابط الصوت
+let ttsCalls=[];                 // توقيتات آخر الطلبات
+const TTS_LIMIT=10, TTS_WINDOW=60000;
+
+function ttsSlotsLeft(){
+  const now=Date.now();
+  ttsCalls=ttsCalls.filter(t=>now-t<TTS_WINDOW);
+  return TTS_LIMIT-ttsCalls.length;
+}
+function ttsWaitMs(){
+  if(ttsSlotsLeft()>0) return 0;
+  return TTS_WINDOW-(Date.now()-ttsCalls[0])+300;
+}
+
+async function fetchTtsAudio(text,key,voice,attempt=0){
+  const wait=ttsWaitMs();
+  if(wait>0){
+    if(attempt>0) throw new Error(`الحد المجاني اتملى — استنى ${Math.ceil(wait/1000)} ثانية`);
+    vAlert("warn",`⏳ وصلت للحد المجاني (١٠/دقيقة). بستنى ${Math.ceil(wait/1000)} ثانية وبكمّل…`);
+    await new Promise(r=>setTimeout(r,wait));
+  }
+  ttsCalls.push(Date.now());
+
   const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key="+encodeURIComponent(key),
     {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       contents:[{parts:[{text:"اقرأ النص ده بلهجة مصرية طبيعية بنبرة موظف مبيعات ودود ومهني: "+text}]}],
       generationConfig:{responseModalities:["AUDIO"],
         speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:voice}}}}})});
+
+  if(r.status===429 && attempt<1){
+    const e=await r.json().catch(()=>({}));
+    const m=JSON.stringify(e).match(/retry in ([\d.]+)s/i);
+    const delay=Math.min(Math.ceil(parseFloat(m?m[1]:8))*1000+500, 65000);
+    vAlert("warn",`⏳ Google طلب انتظار ${Math.ceil(delay/1000)} ثانية — بستنى وبعيد المحاولة…`);
+    await new Promise(res=>setTimeout(res,delay));
+    ttsCalls=[];                 // النافذة اتصفّرت
+    return fetchTtsAudio(text,key,voice,attempt+1);
+  }
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
+
   const j=await r.json();
   const part=j.candidates?.[0]?.content?.parts?.find(p=>p.inlineData);
   if(!part)throw new Error("مفيش صوت في الرد");
@@ -653,16 +686,33 @@ async function speakGemini(text){
   const rate=parseInt((mime.match(/rate=(\d+)/)||[])[1]||"24000",10);
   const bin=atob(part.inlineData.data),bytes=new Uint8Array(bin.length);
   for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
-  const url=URL.createObjectURL(pcmToWav(bytes,rate));
+  return URL.createObjectURL(pcmToWav(bytes,rate));
+}
+
+async function speakGemini(text){
+  const key=document.getElementById("key").value.trim();
+  if(!key)throw new Error("مفيش مفتاح");
+  const voice=document.getElementById("gVoiceSel").value;
+  const ck=voice+"|"+text;
+
+  // نفس الرد اتقال قبل كده؟ منستهلكش طلب جديد
+  let url=ttsCache.get(ck);
+  if(!url){
+    url=await fetchTtsAudio(text,key,voice);
+    ttsCache.set(ck,url);
+    vAlertHide();
+  }
+
   return new Promise((res,rej)=>{
+    // مهم: منمسحش الرابط لأنه محفوظ في الذاكرة للاستخدام تاني
     const a=getAudioEl();
     a.onended=null;a.onerror=null;a.pause();
     a.src=url;a.volume=1;curAudio=a;
-    a.onended=()=>{URL.revokeObjectURL(url);res();};
-    a.onerror=()=>{URL.revokeObjectURL(url);rej(new Error("فشل تشغيل الصوت"));};
+    a.onended=()=>res();
+    a.onerror=()=>rej(new Error("فشل تشغيل الصوت"));
     const p=a.play();
-    if(p&&p.catch)p.catch(()=>{URL.revokeObjectURL(url);
-      rej(new Error("المتصفح منع الصوت — دوس على الشاشة وجرّب تاني"));});
+    if(p&&p.catch)p.catch(()=>
+      rej(new Error("المتصفح منع الصوت — دوس على الشاشة وجرّب تاني")));
   });
 }
 function speak(text){
@@ -670,11 +720,15 @@ function speak(text){
   const key=document.getElementById("key").value.trim();
   if(engine==="gemini"&&key.length>10){
     speaking=true;setMic("spk","بيتكلم…");
-    return speakGemini(text).then(()=>{speaking=false;}).catch(e=>{
+    return speakGemini(text).then(()=>{speaking=false;showQuota();}).catch(e=>{
       speaking=false;
       if(/منع الصوت|NotAllowed/i.test(e.message)){
         vAlert("err","🔇 المتصفح منع الصوت. دوس على أي مكان في الشاشة، وبعدين دوس 🔊 جنب الرد.");
         return;
+      }
+      if(/quota|429|الحد المجاني/i.test(e.message)){
+        vAlert("warn","⏳ خلص رصيد الدقيقة (١٠ طلبات). استنى دقيقة وهيرجع لوحده. دوس 🔊 جنب الرد عشان تسمعه.");
+        return;   // منرجعش للصوت الآلي الوحش
       }
       vAlert("warn","صوت Google فشل ("+e.message+") — رجعت لصوت الجهاز.");
       return speakBrowser(text);
@@ -719,15 +773,23 @@ document.getElementById("voiceSel").addEventListener("change",e=>{
 setInterval(()=>{if(speaking&&speechSynthesis.speaking&&!speechSynthesis.paused){
   speechSynthesis.pause();speechSynthesis.resume();}},10000);
 
+function showQuota(){
+  if(document.getElementById("engineSel").value!=="gemini")return;
+  const left=ttsSlotsLeft();
+  document.getElementById("voiceNote").innerHTML=
+    `صوت Google طبيعي وبيدعم المصري كويس.<br>`+
+    `<b>متبقي ${left} من ١٠ طلبات في الدقيقة</b>`+
+    (ttsCache.size?` · محفوظ ${ttsCache.size} رد في الذاكرة`:"");
+}
 function onEngineChange(){
   const g=document.getElementById("engineSel").value==="gemini";
   document.getElementById("gVoiceSel").style.display=g?"block":"none";
   document.getElementById("voiceSel").style.display=g?"none":"block";
-  document.getElementById("voiceNote").innerHTML=g
-    ?"صوت Google طبيعي وبيدعم المصري كويس."
-    :"صوت الجهاز آلي — للطوارئ بس.";
+  if(g) showQuota();
+  else document.getElementById("voiceNote").innerHTML="صوت الجهاز آلي — للطوارئ بس.";
   vAlertHide();
 }
+setInterval(()=>{ if(document.getElementById("engineSel").value==="gemini") showQuota(); },5000);
 async function testVoice(){
   warmUp();vAlertHide();
   const t="أهلاً بحضرتك في الهشام للعقارات. تحت أمرك، بتدور على إيه؟";
