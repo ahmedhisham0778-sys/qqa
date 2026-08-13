@@ -386,6 +386,11 @@ ${sl}
  "unit_type":أو null,"area":أو null,"payment":"كاش|تقسيط" أو null,"unit_id":أو null}`;
 }
 function keyProvider(k){return k.startsWith("sk-")?"openai":"gemini";}
+
+/* موديلات Gemini — بنجرب واحد ورا التاني.
+   ⚠️ gemini-2.0-flash اتقفل في يونيو ٢٠٢٦، عشان كده بنبدأ بـ 2.5 */
+const GEMINI_MODELS=["gemini-2.5-flash","gemini-3.5-flash-lite","gemini-2.5-flash-lite"];
+let liveModel=null;   // أول موديل يشتغل بنفضل عليه
 async function aiReply(text){
   const key=document.getElementById("key").value.trim();
   S.history.push({role:"user",content:text});
@@ -395,14 +400,41 @@ async function aiReply(text){
   catch{const m=raw.match(/\{[\s\S]*\}/);if(m){try{return JSON.parse(m[0]);}catch{}}
     return {reply:"معلش مسمعتش كويس، ممكن تعيد؟",action:"none"};}
 }
+async function geminiCall(key, model, body){
+  const r=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=`+encodeURIComponent(key),
+    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});
+  if(!r.ok){
+    const e=await r.json().catch(()=>({}));
+    const msg=e.error?.message||("خطأ "+r.status);
+    const err=new Error(msg); err.status=r.status; throw err;
+  }
+  return r.json();
+}
+
+/* بنجرب الموديلات بالترتيب — لو واحد مقفول أو مش متاح ننتقل للي بعده */
+async function geminiTry(key, body){
+  const list = liveModel ? [liveModel, ...GEMINI_MODELS.filter(m=>m!==liveModel)] : GEMINI_MODELS;
+  let last=null;
+  for(const m of list){
+    try{
+      const j=await geminiCall(key,m,body);
+      if(liveModel!==m){ liveModel=m; console.log("الموديل الشغال:",m); }
+      return j;
+    }catch(e){
+      last=e;
+      // 404/400 = الموديل مش موجود → نجرب اللي بعده. غير كده نوقف
+      if(e.status!==404 && e.status!==400) throw e;
+    }
+  }
+  throw last||new Error("مفيش موديل شغال");
+}
+
 async function callGemini(key){
   const contents=S.history.slice(-12).map(m=>({role:m.role==="assistant"?"model":"user",parts:[{text:m.content}]}));
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key),
-    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      system_instruction:{parts:[{text:buildSystemPrompt()}]},contents,
-      generationConfig:{responseMimeType:"application/json",temperature:.5,maxOutputTokens:500}})});
-  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
-  const j=await r.json(),t=j.candidates?.[0]?.content?.parts?.[0]?.text;
+  const j=await geminiTry(key,{
+    system_instruction:{parts:[{text:buildSystemPrompt()}]},contents,
+    generationConfig:{responseMimeType:"application/json",temperature:.5,maxOutputTokens:500}});
+  const t=j.candidates?.[0]?.content?.parts?.[0]?.text;
   if(!t)throw new Error("مفيش رد من الموديل");return t;
 }
 async function callOpenAI(key){
@@ -846,14 +878,11 @@ async function geminiTranscribe(rawPcm,rate=16000){
   const key=document.getElementById("key").value.trim();
   if(key.length<10)throw new Error("محتاج مفتاح Google عشان التسجيل");
   const b64=bytesToB64(pcmToWavBytes(rawPcm,rate));
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key="+encodeURIComponent(key),
-    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
-      contents:[{parts:[
-        {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس، من غير أي شرح. لو مفيش كلام واضح اكتب: لا_يوجد"},
-        {inline_data:{mime_type:"audio/wav",data:b64}}]}],
-      generationConfig:{temperature:0,maxOutputTokens:200}})});
-  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("خطأ "+r.status));}
-  const j=await r.json();
+  const j=await geminiTry(key,{
+    contents:[{parts:[
+      {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس، من غير أي شرح. لو مفيش كلام واضح اكتب: لا_يوجد"},
+      {inline_data:{mime_type:"audio/wav",data:b64}}]}],
+    generationConfig:{temperature:0,maxOutputTokens:200}});
   const t=(j.candidates?.[0]?.content?.parts?.[0]?.text||"").trim();
   if(!t||t.includes("لا_يوجد"))throw new Error("مسمعتش كلام واضح");
   return t;
