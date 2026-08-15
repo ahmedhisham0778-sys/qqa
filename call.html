@@ -115,11 +115,11 @@ let vadTimer=null, speechMs=0, silenceMs=0, hadSpeech=false;
 let audioEl=null, speaking=false;
 
 /* إعدادات كشف الكلام */
-const TH_ON = 0.020;
-const TH_OFF= 0.012;
-const MIN_SPEECH = 350;
-const END_SILENCE = 1100;
-const BARGE_IN = 380;
+const TH_ON = 0.018;
+const TH_OFF= 0.010;
+const MIN_SPEECH = 280;
+const END_SILENCE = 480;
+const BARGE_IN = 300;
 
 function setPhase(p,msg){
   phase=p; $("core").className="core "+p; $("st").textContent=msg;
@@ -224,7 +224,7 @@ async function turn(text){
 }
 async function transcribe(pcm){
   const k=$("key").value.trim();
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key="+encodeURIComponent(k),
+    const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key="+encodeURIComponent(k),
     {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       contents:[{parts:[
         {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس. لو مفيش كلام اكتب: لا_يوجد"},
