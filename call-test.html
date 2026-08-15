@@ -259,7 +259,7 @@ async function blobToPcm(blob){
 }
 async function transcribe(pcm){
   const k=$("key").value.trim(); if(k.length<10) throw new Error("محتاج مفتاح Google عشان يسمعك");
-  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+encodeURIComponent(k),
+      const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key="+encodeURIComponent(k),
     {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       contents:[{parts:[
         {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس. لو مفيش كلام اكتب: لا_يوجد"},
