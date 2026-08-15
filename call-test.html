@@ -100,11 +100,13 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
       <div>
         <label>الصوت</label>
         <select id="voice">
-          <option value="Kore">Kore — أنثى واضحة</option>
-          <option value="Callirrhoe">Callirrhoe — أنثى هادئة</option>
-          <option value="Leda">Leda — أنثى شابة</option>
-          <option value="Charon">Charon — ذكر رسمي</option>
-          <option value="Puck">Puck — ذكر ودود</option>
+          <option value="none">🚀 بدون صوت — لقياس سرعة العقل بس</option>
+          <option value="browser">صوت الجهاز — سريع (شبيه بالمكالمة الحقيقية)</option>
+          <option value="Kore">Google Kore — أنثى واضحة (بطيء)</option>
+          <option value="Callirrhoe">Google Callirrhoe — أنثى هادئة</option>
+          <option value="Leda">Google Leda — أنثى شابة</option>
+          <option value="Charon">Google Charon — ذكر رسمي</option>
+          <option value="Puck">Google Puck — ذكر ودود</option>
         </select>
       </div>
     </div>
@@ -148,7 +150,7 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 const $=id=>document.getElementById(id);
 let nextAction=null, times=[], audioEl=null, unlocked=false, busy=false;
 
-/* الصوت (فتح القفل للموبايل) */
+/* ═══ الصوت (فتح القفل للموبايل) ═══ */
 function getA(){ if(!audioEl){audioEl=new Audio();audioEl.setAttribute("playsinline","");} return audioEl; }
 function unlock(){
   if(unlocked)return; const a=getA();
@@ -170,9 +172,32 @@ function b64(bytes){let s="";const c=8192;
   for(let i=0;i<bytes.length;i+=c)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+c));return btoa(s)}
 
 const ttsCache=new Map();
+
+// صوت الجهاز — سريع جداً، أقرب حاجة لسرعة المكالمة الحقيقية
+function speakBrowser(text){
+  return new Promise(res=>{
+    if(!("speechSynthesis" in window)){res();return}
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(text);
+      const ar=speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith("ar"));
+      if(ar.length)u.voice=ar[0];
+      u.lang=ar.length?ar[0].lang:"ar-EG";u.volume=1;
+      let done=false;const fin=()=>{if(!done){done=true;res()}};
+      u.onend=fin;u.onerror=fin;
+      setMic("spk","بيتكلم…");
+      speechSynthesis.speak(u);
+      setTimeout(fin,Math.max(3000,text.length*110));
+    },60);
+  });
+}
+
 async function speak(text){
+  const v=$("voice").value;
+  if(v==="none") return 0;                       // بدون صوت
+  if(v==="browser"){ const t0=performance.now(); await speakBrowser(text); return performance.now()-t0; }
   const k=$("key").value.trim(); if(k.length<10) return 0;
-  const v=$("voice").value, ck=v+"|"+text, t0=performance.now();
+  const ck=v+"|"+text, t0=performance.now();
   let url=ttsCache.get(ck);
   if(!url){
     const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key="+encodeURIComponent(k),
@@ -199,28 +224,52 @@ async function speak(text){
   return dt;
 }
 
-/* التسجيل */
-let stream,ctx,src,proc,chunks=[],rec=false,rate0=48000;
+/* ═══ التسجيل ═══ */
+/* بنستخدم MediaRecorder — ده الشغّال على الآيفون.
+   ScriptProcessor القديم بيفشل بصمت على iOS. */
+let stream=null, mr=null, blobs=[], rec=false;
+
 async function startRec(){
-  stream=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});
-  ctx=new (window.AudioContext||window.webkitAudioContext)();
-  if(ctx.state==="suspended")await ctx.resume();
-  rate0=ctx.sampleRate; src=ctx.createMediaStreamSource(stream);
-  proc=ctx.createScriptProcessor(4096,1,1); chunks=[];
-  proc.onaudioprocess=e=>{if(rec)chunks.push(new Float32Array(e.inputBuffer.getChannelData(0)))};
-  src.connect(proc);proc.connect(ctx.destination);rec=true;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)
+    throw new Error("المتصفح مش بيدعم الميكروفون — استخدم Chrome أو Safari");
+  if(!window.MediaRecorder)
+    throw new Error("المتصفح مش بيدعم التسجيل — حدّث المتصفح");
+  stream=await navigator.mediaDevices.getUserMedia({audio:{
+    echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  let mime="";
+  for(const m of ["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/aac"]){
+    if(MediaRecorder.isTypeSupported(m)){mime=m;break}
+  }
+  blobs=[];
+  mr = mime ? new MediaRecorder(stream,{mimeType:mime}) : new MediaRecorder(stream);
+  mr.ondataavailable=e=>{if(e.data&&e.data.size)blobs.push(e.data)};
+  mr.start(200); rec=true;
 }
+
 function stopRec(){
-  rec=false;
-  try{proc.disconnect();proc.onaudioprocess=null}catch(e){}
-  try{src.disconnect()}catch(e){}
-  try{stream.getTracks().forEach(t=>t.stop())}catch(e){}
-  try{ctx.close()}catch(e){}
-  let n=0;chunks.forEach(c=>n+=c.length);
-  const all=new Float32Array(n);let o=0;chunks.forEach(c=>{all.set(c,o);o+=c.length});
-  const tr=16000,ra=rate0/tr,L=Math.floor(all.length/ra),p16=new Int16Array(L);
-  for(let i=0;i<L;i++){const s=Math.max(-1,Math.min(1,all[Math.floor(i*ra)]||0));p16[i]=s<0?s*0x8000:s*0x7FFF}
-  return {bytes:new Uint8Array(p16.buffer),secs:L/tr};
+  return new Promise(res=>{
+    if(!mr||mr.state==="inactive"){rec=false;res(null);return}
+    mr.onstop=()=>{
+      try{stream.getTracks().forEach(t=>t.stop())}catch(e){}
+      rec=false; res(new Blob(blobs,{type:mr.mimeType||"audio/webm"}));
+    };
+    try{mr.stop()}catch(e){rec=false;res(null)}
+  });
+}
+
+// نفك الصوت المضغوط ونطلعه PCM 16k — Gemini بيفهم WAV بس
+async function blobToPcm(blob){
+  if(!blob||!blob.size) throw new Error("مفيش صوت اتسجّل");
+  const buf=await blob.arrayBuffer();
+  const AC=window.AudioContext||window.webkitAudioContext;
+  const c=new AC(); let d;
+  try{ d=await c.decodeAudioData(buf); }
+  catch(e){ throw new Error("مش قادر أقرا الصوت المسجّل"); }
+  finally{ try{c.close()}catch(e){} }
+  const ch=d.getChannelData(0), tr=16000, ra=d.sampleRate/tr;
+  const L=Math.floor(ch.length/ra), p=new Int16Array(L);
+  for(let i=0;i<L;i++){const s=Math.max(-1,Math.min(1,ch[Math.floor(i*ra)]||0));p[i]=s<0?s*0x8000:s*0x7FFF}
+  return {bytes:new Uint8Array(p.buffer), secs:L/tr};
 }
 async function transcribe(pcm){
   const k=$("key").value.trim(); if(k.length<10) throw new Error("محتاج مفتاح Google");
@@ -236,7 +285,7 @@ async function transcribe(pcm){
   return t;
 }
 
-/* السيرفر */
+/* ═══ السيرفر ═══ */
 function sayOf(x){const m=x.match(/<Say[^>]*>([\s\S]*?)<\/Say>/);
   return m?m[1].replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">"):null}
 function actOf(x){const m=x.match(/action="([^"]+)"/);return m?m[1].replace(/&amp;/g,"&"):null}
@@ -255,7 +304,7 @@ async function turn(text){
   return {reply:sayOf(x)||"(انتهت المكالمة)", ms:dt, ended:!nextAction};
 }
 
-/* الواجهة */
+/* ═══ الواجهة ═══ */
 function add(cls,txt){const d=document.createElement("div");d.className="msg "+cls;d.textContent=txt;
   $("chat").appendChild(d);$("chat").scrollTop=$("chat").scrollHeight;return d}
 function grade(ms){return ms<1500?"fast":(ms<3000?"mid":"slow")}
@@ -310,15 +359,24 @@ async function tap(){
   unlock(); if(busy)return;
   if(rec){
     setMic("busy","بيسمع كلامك…");
-    const {bytes,secs}=stopRec();
-    if(secs<0.4){setMic("","اضغط وابدأ اتكلم");showErr("التسجيل قصير — اضغط، اتكلم، وبعدين اضغط تاني");return}
-    try{ const t=await transcribe(bytes); await handle(t); }
-    catch(e){ showErr(e.message); setMic("","اضغط وابدأ اتكلم"); }
+    try{
+      const blob=await stopRec();
+      const {bytes,secs}=await blobToPcm(blob);
+      if(secs<0.4){setMic("","اضغط وابدأ اتكلم");showErr("التسجيل قصير — اضغط، اتكلم، وبعدين اضغط تاني");return}
+      const t=await transcribe(bytes);
+      await handle(t);
+    }catch(e){ showErr("🎙 "+(e.message||e)); setMic("","اضغط وابدأ اتكلم"); }
     return;
   }
   hideErr();
   try{ await startRec(); setMic("rec","بسجّل… اضغط تاني لما تخلص"); }
-  catch(e){ showErr("الميكروفون: "+e.message); }
+  catch(e){
+    const n=e.name||"";
+    const m = n==="NotAllowedError" ? "رفضت إذن الميكروفون. دوس على 🔒 جنب الرابط واسمح بالميكروفون، وأعد التحميل."
+      : n==="NotFoundError" ? "مفيش ميكروفون متوصّل بالجهاز."
+      : (e.message||"مش قادر أفتح الميكروفون");
+    showErr("🎙 "+m);
+  }
 }
 
 try{const k=localStorage.getItem("vk");if(k)$("key").value=k}catch(e){}
