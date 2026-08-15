@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مكالمة مباشرة</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b13;--s:rgba(255,255,255,.06);--l:rgba(255,255,255,.09);
+ --t:#eef2f8;--t2:#94a3b8;--t3:#5d6b7d;--g:#22c55e;--r:#f43f5e;--b:#3b82f6;--y:#f59e0b}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--t);
+ min-height:100vh;padding:18px;display:flex;justify-content:center;overflow-x:hidden}
+.app{width:100%;max-width:560px;display:flex;flex-direction:column;gap:14px}
+.setup{background:var(--s);border:1px solid var(--l);border-radius:16px;padding:15px}
+.setup.hide{display:none}
+label{font-size:11.5px;color:var(--t2);display:block;margin-bottom:5px;font-weight:500}
+input,select{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--l);
+ background:rgba(0,0,0,.35);color:var(--t);font-size:13px;font-family:inherit;margin-bottom:10px}
+input:focus,select:focus{outline:none;border-color:var(--b)}
+.hint{font-size:11px;color:var(--t3);line-height:1.8}
+.phone{background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+ border:1px solid var(--l);border-radius:24px;overflow:hidden;
+ box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.top{padding:22px;text-align:center;border-bottom:1px solid var(--l)}
+.top .who{font-size:18px;font-weight:800}
+.top .st{font-size:13px;color:var(--t3);margin-top:5px;min-height:20px}
+.top .tm{font-size:12px;color:var(--t3);margin-top:3px}
+.orb{display:flex;justify-content:center;padding:26px 0 10px}
+.core{position:relative;width:150px;height:150px;display:flex;align-items:center;justify-content:center}
+.wave{position:absolute;border-radius:50%;inset:22px;background:rgba(59,130,246,.18);
+ transform:scale(1);transition:transform .08s linear}
+.dot{width:96px;height:96px;border-radius:50%;position:relative;z-index:2;
+ display:flex;align-items:center;justify-content:center;font-size:38px;
+ background:linear-gradient(135deg,#1e293b,#0f172a);border:2px solid var(--l);transition:.3s}
+.listen .dot{border-color:var(--g);box-shadow:0 0 42px rgba(34,197,94,.35)}
+.listen .wave{background:rgba(34,197,94,.2)}
+.speak .dot{border-color:var(--b);box-shadow:0 0 42px rgba(59,130,246,.4)}
+.think .dot{border-color:var(--y);box-shadow:0 0 42px rgba(245,158,11,.35)}
+.think .wave{background:rgba(245,158,11,.16);animation:pulse 1.1s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.15)}}
+#log{max-height:230px;overflow-y:auto;padding:0 18px 14px;display:flex;flex-direction:column;gap:9px}
+#log::-webkit-scrollbar{width:5px}
+#log::-webkit-scrollbar-thumb{background:var(--l);border-radius:9px}
+.b{max-width:82%;padding:10px 14px;font-size:14px;line-height:1.65;border-radius:15px;white-space:pre-wrap}
+.b.a{background:var(--s);border:1px solid var(--l);align-self:flex-start;border-bottom-right-radius:4px}
+.b.u{background:linear-gradient(135deg,#1d4ed8,#3b82f6);align-self:flex-end;border-bottom-left-radius:4px}
+.b .ms{display:block;font-size:10px;color:var(--t3);margin-top:5px}
+.note{align-self:center;font-size:11px;color:var(--t3)}
+.acts{padding:16px 18px 20px;display:flex;gap:10px;border-top:1px solid var(--l)}
+.btn{flex:1;padding:16px;border:0;border-radius:14px;font-size:16px;font-weight:800;
+ cursor:pointer;font-family:inherit;color:#fff;transition:.2s}
+.start{background:linear-gradient(135deg,#22c55e,#16a34a);box-shadow:0 8px 26px rgba(34,197,94,.32)}
+.stop{background:linear-gradient(135deg,#f43f5e,#e11d48);box-shadow:0 8px 26px rgba(244,63,94,.32)}
+.btn:active{transform:scale(.98)}
+.alert{margin:0 18px 14px;padding:11px 13px;border-radius:11px;font-size:12px;line-height:1.7;
+ background:rgba(244,63,94,.12);border:1px solid rgba(244,63,94,.3);color:#fda4af;display:none}
+.alert.show{display:block}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="setup" id="setup">
+    <label>مفتاح Google</label>
+    <input id="key" type="password" placeholder="الصق المفتاح…">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px">
+      <div>
+        <label>العميل</label>
+        <select id="to">
+          <option value="+15005550002">الهشام للعقارات — مصري</option>
+          <option value="+15005550001">عيادة الابتسامة — سعودي</option>
+        </select>
+      </div>
+      <div>
+        <label>الصوت</label>
+        <select id="voice">
+          <option value="browser">صوت الجهاز — أسرع</option>
+          <option value="Kore">Google Kore — أحلى بس أبطأ</option>
+          <option value="Callirrhoe">Google Callirrhoe</option>
+          <option value="Charon">Google Charon — ذكر</option>
+        </select>
+      </div>
+    </div>
+    <div class="hint">
+      🎧 <b>استخدم سماعة</b> عشان النظام ما يسمعش صوت نفسه.<br>
+      دوس «ابدأ المكالمة» مرة واحدة — بعدها اتكلم عادي، هو هيرد لوحده لما تسكت.
+    </div>
+  </div>
+
+  <div class="phone">
+    <div class="top">
+      <div class="who" id="who">مكالمة مباشرة</div>
+      <div class="st" id="st">جاهز — دوس ابدأ</div>
+      <div class="tm" id="tm"></div>
+    </div>
+    <div class="orb"><div class="core" id="core">
+      <span class="wave" id="wave"></span>
+      <span class="dot" id="dot">📞</span>
+    </div></div>
+    <div id="log"></div>
+    <div class="alert" id="err"></div>
+    <div class="acts">
+      <button class="btn start" id="go" onclick="toggle()">ابدأ المكالمة</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $=i=>document.getElementById(i);
+const BASE="https://delicate-bush-ebe8.agent-call.workers.dev";
+
+let live=false, phase="", nextAct=null, t0=0, timer=null;
+let stream=null, ac=null, analyser=null, mr=null, blobs=[], recording=false;
+let vadTimer=null, speechMs=0, silenceMs=0, hadSpeech=false;
+let audioEl=null, speaking=false;
+
+/* إعدادات كشف الكلام */
+const TH_ON = 0.020;
+const TH_OFF= 0.012;
+const MIN_SPEECH = 350;
+const END_SILENCE = 1100;
+const BARGE_IN = 380;
+
+function setPhase(p,msg){
+  phase=p; $("core").className="core "+p; $("st").textContent=msg;
+  $("dot").textContent = p==="listen"?"🎙":(p==="think"?"⏳":(p==="speak"?"🔊":"📞"));
+}
+function add(who,txt,ms){
+  const d=document.createElement("div"); d.className="b "+who; d.textContent=txt;
+  if(ms){const s=document.createElement("span");s.className="ms";s.textContent=Math.round(ms)+" ms";d.appendChild(s);}
+  $("log").appendChild(d); $("log").scrollTop=$("log").scrollHeight;
+}
+function note(t){const d=document.createElement("div");d.className="note";d.textContent=t;
+  $("log").appendChild(d);$("log").scrollTop=$("log").scrollHeight;}
+function err(m){$("err").textContent=m;$("err").className="alert show";}
+function clearErr(){$("err").className="alert";}
+function tick(){
+  const s=Math.floor((Date.now()-t0)/1000);
+  $("tm").textContent=String(Math.floor(s/60)).padStart(2,"0")+":"+String(s%60).padStart(2,"0");
+}
+
+function getA(){if(!audioEl){audioEl=new Audio();audioEl.setAttribute("playsinline","")}return audioEl}
+function pcmWav(pcm,rate){
+  const n=pcm.length,b=new ArrayBuffer(44+n),d=new DataView(b);
+  const w=(o,s)=>{for(let i=0;i<s.length;i++)d.setUint8(o+i,s.charCodeAt(i))};
+  w(0,"RIFF");d.setUint32(4,36+n,true);w(8,"WAVE");w(12,"fmt ");
+  d.setUint32(16,16,true);d.setUint16(20,1,true);d.setUint16(22,1,true);
+  d.setUint32(24,rate,true);d.setUint32(28,rate*2,true);d.setUint16(32,2,true);d.setUint16(34,16,true);
+  w(36,"data");d.setUint32(40,n,true);new Uint8Array(b,44).set(pcm);return new Uint8Array(b);
+}
+function b64(x){let s="";const c=8192;
+  for(let i=0;i<x.length;i+=c)s+=String.fromCharCode.apply(null,x.subarray(i,i+c));return btoa(s)}
+
+function stopSpeaking(){
+  speaking=false;
+  try{speechSynthesis.cancel()}catch(e){}
+  try{if(audioEl){audioEl.pause();audioEl.currentTime=0}}catch(e){}
+}
+const ttsCache=new Map();
+function speakBrowser(text){
+  return new Promise(res=>{
+    if(!("speechSynthesis" in window)){res();return}
+    speechSynthesis.cancel();
+    setTimeout(()=>{
+      const u=new SpeechSynthesisUtterance(text);
+      const ar=speechSynthesis.getVoices().filter(v=>v.lang&&v.lang.toLowerCase().startsWith("ar"));
+      if(ar.length){u.voice=ar[0];u.lang=ar[0].lang}else u.lang="ar-EG";
+      let done=false;const fin=()=>{if(!done){done=true;res()}};
+      u.onend=fin;u.onerror=fin;
+      speechSynthesis.speak(u);
+      setTimeout(fin,Math.max(2500,text.length*105));
+    },50);
+  });
+}
+async function say(text){
+  const v=$("voice").value;
+  speaking=true; setPhase("speak","بيتكلم…");
+  try{
+    if(v==="browser"){ await speakBrowser(text); }
+    else{
+      const k=$("key").value.trim();
+      const ck=v+"|"+text; let url=ttsCache.get(ck);
+      if(!url){
+        const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-tts:generateContent?key="+encodeURIComponent(k),
+          {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+            contents:[{parts:[{text:"اقرأ ده بلهجة عربية طبيعية بنبرة موظف ودود: "+text}]}],
+            generationConfig:{responseModalities:["AUDIO"],
+              speechConfig:{voiceConfig:{prebuiltVoiceConfig:{voiceName:v}}}}})});
+        if(!r.ok)throw new Error("صوت "+r.status);
+        const j=await r.json(),p=j.candidates?.[0]?.content?.parts?.find(x=>x.inlineData);
+        if(!p)throw new Error("مفيش صوت");
+        const rate=parseInt((p.inlineData.mimeType.match(/rate=(\d+)/)||[])[1]||"24000",10);
+        const bin=atob(p.inlineData.data),by=new Uint8Array(bin.length);
+        for(let i=0;i<bin.length;i++)by[i]=bin.charCodeAt(i);
+        url=URL.createObjectURL(new Blob([pcmWav(by,rate)],{type:"audio/wav"}));
+        ttsCache.set(ck,url);
+      }
+      await new Promise(res=>{
+        const a=getA(); a.onended=null;a.onerror=null;a.pause();
+        a.src=url;a.volume=1;a.onended=res;a.onerror=res;
+        const p=a.play(); if(p&&p.catch)p.catch(()=>res());
+      });
+    }
+  }catch(e){ err("الصوت: "+e.message); }
+  speaking=false;
+}
+
+const sayOf=x=>{const m=x.match(/<Say[^>]*>([\s\S]*?)<\/Say>/);
+  return m?m[1].replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,"&"):null};
+const actOf=x=>{const m=x.match(/action="([^"]+)"/);return m?m[1].replace(/&amp;/g,"&"):null};
+
+async function startCall(){
+  const to=$("to").value;
+  const r=await fetch(BASE+"/voice",{method:"POST",
+    body:new URLSearchParams({To:to,From:"+201000000000",CallSid:"CAlive"})});
+  const x=await r.text(); nextAct=actOf(x); return sayOf(x)||"";
+}
+async function turn(text){
+  const t=performance.now();
+  const r=await fetch(nextAct,{method:"POST",
+    body:new URLSearchParams({To:$("to").value,From:"+201000000000",SpeechResult:text,CallSid:"CAlive"})});
+  const x=await r.text(); nextAct=actOf(x);
+  return {reply:sayOf(x)||"",ms:performance.now()-t,ended:!nextAct};
+}
+async function transcribe(pcm){
+  const k=$("key").value.trim();
+  const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key="+encodeURIComponent(k),
+    {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
+      contents:[{parts:[
+        {text:"اكتب نص الكلام العربي في التسجيل ده حرفياً بس. لو مفيش كلام اكتب: لا_يوجد"},
+        {inline_data:{mime_type:"audio/wav",data:b64(pcmWav(pcm,16000))}}]}],
+      generationConfig:{temperature:0,maxOutputTokens:150}})});
+  if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("سمع "+r.status))}
+  const j=await r.json(),t=(j.candidates?.[0]?.content?.parts?.[0]?.text||"").trim();
+  if(!t||t.includes("لا_يوجد"))return null;
+  return t;
+}
+
+function segStart(){
+  if(recording||!stream)return;
+  blobs=[];
+  let mime="";
+  for(const m of ["audio/webm;codecs=opus","audio/webm","audio/mp4"]){
+    try{if(MediaRecorder.isTypeSupported(m)){mime=m;break}}catch(e){}
+  }
+  mr = mime? new MediaRecorder(stream,{mimeType:mime}) : new MediaRecorder(stream);
+  mr.ondataavailable=e=>{if(e.data&&e.data.size)blobs.push(e.data)};
+  mr.start(150); recording=true;
+}
+function segStop(){
+  return new Promise(res=>{
+    if(!mr||mr.state==="inactive"){recording=false;res(null);return}
+    mr.onstop=()=>{recording=false;res(new Blob(blobs,{type:mr.mimeType||"audio/webm"}))};
+    try{mr.stop()}catch(e){recording=false;res(null)}
+  });
+}
+async function toPcm(blob){
+  if(!blob||blob.size<800)return null;
+  const buf=await blob.arrayBuffer();
+  const AC=window.AudioContext||window.webkitAudioContext;
+  const c=new AC(); let d;
+  try{ d=await c.decodeAudioData(buf); }catch(e){ return null; }
+  finally{ try{c.close()}catch(e){} }
+  const ch=d.getChannelData(0),tr=16000,ra=d.sampleRate/tr;
+  const L=Math.floor(ch.length/ra),p=new Int16Array(L);
+  for(let i=0;i<L;i++){const s=Math.max(-1,Math.min(1,ch[Math.floor(i*ra)]||0));p[i]=s<0?s*0x8000:s*0x7FFF}
+  return {bytes:new Uint8Array(p.buffer),secs:L/tr};
+}
+
+function vadLoop(){
+  const buf=new Float32Array(analyser.fftSize);
+  let last=performance.now();
+  vadTimer=setInterval(()=>{
+    if(!live)return;
+    analyser.getFloatTimeDomainData(buf);
+    let sum=0; for(let i=0;i<buf.length;i++)sum+=buf[i]*buf[i];
+    const rms=Math.sqrt(sum/buf.length);
+    const now=performance.now(), dt=now-last; last=now;
+    $("wave").style.transform="scale("+(1+Math.min(rms*9,0.75))+")";
+    if(speaking){
+      if(rms>TH_ON){ speechMs+=dt; if(speechMs>BARGE_IN){ stopSpeaking(); speechMs=0; } }
+      else speechMs=0;
+      return;
+    }
+    if(phase!=="listen")return;
+    if(rms>TH_ON){
+      speechMs+=dt; silenceMs=0;
+      if(!hadSpeech&&speechMs>=MIN_SPEECH){ hadSpeech=true; setPhase("listen","بسمعك…"); }
+    }else if(rms<TH_OFF){
+      if(hadSpeech){
+        silenceMs+=dt;
+        if(silenceMs>=END_SILENCE){ hadSpeech=false;speechMs=0;silenceMs=0; process(); }
+      }else speechMs=0;
+    }
+  },60);
+}
+
+async function process(){
+  if(!live)return;
+  setPhase("think","بيفكر…");
+  const blob=await segStop();
+  try{
+    const pcm=await toPcm(blob);
+    if(!pcm||pcm.secs<0.35){ resume(); return; }
+    const text=await transcribe(pcm.bytes);
+    if(!text){ resume(); return; }
+    add("u",text);
+    if(!nextAct){ resume(); return; }
+    const r=await turn(text);
+    if(!live)return;
+    add("a",r.reply,r.ms);
+    await say(r.reply);
+    if(r.ended){ note("— النظام قفل المكالمة —"); end(); return; }
+  }catch(e){ err(e.message); }
+  resume();
+}
+function resume(){
+  if(!live)return;
+  hadSpeech=false;speechMs=0;silenceMs=0;
+  segStart();
+  setPhase("listen","اتكلم…");
+}
+
+async function begin(){
+  clearErr();
+  const k=$("key").value.trim();
+  if(k.length<10){ err("محتاج مفتاح Google الأول"); return; }
+  if(!window.isSecureContext){ err("الصفحة لازم تكون على https"); return; }
+  try{
+    stream=await navigator.mediaDevices.getUserMedia({audio:{
+      echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
+  }catch(e){
+    err(e.name==="NotAllowedError"
+      ? "رفضت إذن الميكروفون. دوس القفل بجانب الرابط ثم Microphone ثم Allow، وأعد التحميل."
+      : "مش قادر أفتح الميكروفون: "+(e.message||e));
+    return;
+  }
+  const AC=window.AudioContext||window.webkitAudioContext;
+  ac=new AC(); if(ac.state==="suspended")await ac.resume();
+  analyser=ac.createAnalyser(); analyser.fftSize=1024;
+  ac.createMediaStreamSource(stream).connect(analyser);
+
+  live=true; $("setup").className="setup hide";
+  $("go").textContent="إنهاء المكالمة"; $("go").className="btn stop";
+  $("log").innerHTML=""; t0=Date.now(); timer=setInterval(tick,1000); tick();
+
+  setPhase("think","بيتصل…");
+  try{
+    const g=await startCall();
+    const parts=g.split("،");
+    $("who").textContent = parts[1] ? parts[1].replace(".","").trim() : "مكالمة مباشرة";
+    add("a",g); await say(g);
+  }catch(e){ err("مش قادر أوصل للسيرفر: "+e.message); end(); return; }
+  vadLoop(); resume();
+}
+
+function end(){
+  live=false; stopSpeaking();
+  try{if(mr&&mr.state!=="inactive")mr.stop()}catch(e){}
+  try{if(stream)stream.getTracks().forEach(t=>t.stop())}catch(e){}
+  try{if(ac)ac.close()}catch(e){}
+  clearInterval(vadTimer); clearInterval(timer);
+  recording=false; nextAct=null;
+  $("setup").className="setup"; $("go").textContent="ابدأ المكالمة"; $("go").className="btn start";
+  setPhase("","انتهت المكالمة"); $("wave").style.transform="scale(1)";
+}
+function toggle(){ live? end() : begin(); }
+
+try{const k=localStorage.getItem("vk");if(k)$("key").value=k}catch(e){}
+$("key").addEventListener("input",()=>{try{localStorage.setItem("vk",$("key").value.trim())}catch(e){}});
+</script>
+</body>
+</html>
