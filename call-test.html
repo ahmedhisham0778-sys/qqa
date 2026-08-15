@@ -6,9 +6,8 @@
 <title>اختبار المكالمة الحقيقي</title>
 <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#0a0e1a;--s:rgba(255,255,255,.04);--s2:rgba(255,255,255,.07);
- --l:rgba(255,255,255,.09);--t:#eef2f8;--t2:#94a3b8;--t3:#64748b;
- --a:#22c55e;--a2:#16a34a;--r:#f43f5e;--y:#f59e0b;--b:#3b82f6}
+:root{--bg:#0a0e1a;--s2:rgba(255,255,255,.07);--l:rgba(255,255,255,.09);
+ --t:#eef2f8;--t2:#94a3b8;--t3:#64748b;--a:#22c55e;--a2:#16a34a;--r:#f43f5e;--b:#3b82f6}
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Tajawal',system-ui,sans-serif;background:var(--bg);color:var(--t);
  min-height:100vh;padding:20px;display:flex;justify-content:center}
@@ -25,7 +24,6 @@ label{font-size:12px;color:var(--t2);display:block;margin-bottom:6px;font-weight
 input,select{width:100%;padding:11px 14px;border-radius:11px;border:1px solid var(--l);
  background:rgba(0,0,0,.3);color:var(--t);font-size:13.5px;font-family:inherit}
 input:focus,select:focus{outline:none;border-color:var(--b)}
-
 #chat{height:300px;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
 .msg{max-width:80%;padding:11px 15px;font-size:14.5px;line-height:1.7;border-radius:16px;white-space:pre-wrap}
 .bot{background:var(--s2);border:1px solid var(--l);align-self:flex-start;border-bottom-right-radius:5px}
@@ -34,7 +32,6 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 .timing{font-size:11px;color:var(--t3);margin-top:6px;display:flex;gap:9px;flex-wrap:wrap}
 .timing b{color:var(--t2);font-weight:600}
 .fast{color:#4ade80}.mid{color:#fbbf24}.slow{color:#f87171}
-
 .mz{padding:24px;border-top:1px solid var(--l);display:flex;flex-direction:column;
  align-items:center;gap:12px;background:rgba(0,0,0,.22)}
 .micw{position:relative;width:92px;height:92px;display:flex;align-items:center;justify-content:center}
@@ -48,15 +45,13 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 .rec .mic{background:linear-gradient(135deg,#f43f5e,#e11d48);box-shadow:0 10px 32px rgba(244,63,94,.5)}
 .busy .mic{background:linear-gradient(135deg,#f59e0b,#d97706)}
 .spk .mic{background:linear-gradient(135deg,#3b82f6,#2563eb)}
-.stat{font-size:14px;color:var(--t2);min-height:22px;text-align:center;font-weight:500}
-
+.stat{font-size:14px;color:var(--t2);min-height:22px;text-align:center;font-weight:500;padding:0 10px}
 .bar{display:flex;gap:8px;padding:13px 15px;border-top:1px solid var(--l)}
 .bar input{flex:1}
 .btn{padding:12px 19px;border:0;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;
  font-family:inherit;background:linear-gradient(135deg,var(--a),var(--a2));color:#fff;white-space:nowrap}
 .btn.g{background:var(--s2);border:1px solid var(--l);color:var(--t2);padding:12px 14px}
 .btn:disabled{background:var(--s2);color:var(--t3);cursor:not-allowed}
-
 .score{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
 .card{background:rgba(0,0,0,.25);border:1px solid var(--l);border-radius:12px;padding:13px;text-align:center}
 .card .n{font-size:21px;font-weight:800}
@@ -64,7 +59,6 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 .alert{margin-top:12px;padding:11px 13px;border-radius:11px;font-size:12.5px;line-height:1.7;display:none}
 .alert.show{display:block}
 .alert.e{background:rgba(244,63,94,.11);border:1px solid rgba(244,63,94,.3);color:#fda4af}
-.alert.w{background:rgba(245,158,11,.11);border:1px solid rgba(245,158,11,.3);color:#fcd34d}
 .hint{font-size:11.5px;color:var(--t3);line-height:1.8;margin-top:10px}
 .hint code{background:rgba(59,130,246,.16);color:#93c5fd;padding:2px 6px;border-radius:5px;
  font-family:monospace;direction:ltr;display:inline-block;font-size:11px}
@@ -72,7 +66,6 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 </head>
 <body>
 <div class="app">
-
   <div class="head">
     <h1>📞 اختبار المكالمة الحقيقي</h1>
     <p>بيكلّم السيرفر نفسه اللي هيرد على التليفون — نفس العقل، نفس الردود</p>
@@ -85,7 +78,7 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
         <input id="base" value="https://delicate-bush-ebe8.agent-call.workers.dev">
       </div>
       <div>
-        <label>العميل (رقم Twilio)</label>
+        <label>العميل</label>
         <select id="to">
           <option value="+15005550002">الهشام للعقارات — مصري</option>
           <option value="+15005550001">عيادة الابتسامة — سعودي</option>
@@ -100,9 +93,9 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
       <div>
         <label>الصوت</label>
         <select id="voice">
-          <option value="none">🚀 بدون صوت — لقياس سرعة العقل بس</option>
-          <option value="browser">صوت الجهاز — سريع (شبيه بالمكالمة الحقيقية)</option>
-          <option value="Kore">Google Kore — أنثى واضحة (بطيء)</option>
+          <option value="browser">صوت الجهاز — سريع (زي المكالمة الحقيقية)</option>
+          <option value="none">بدون صوت — لقياس سرعة العقل بس</option>
+          <option value="Kore">Google Kore — أنثى واضحة (أحلى بس أبطأ)</option>
           <option value="Callirrhoe">Google Callirrhoe — أنثى هادئة</option>
           <option value="Leda">Google Leda — أنثى شابة</option>
           <option value="Charon">Google Charon — ذكر رسمي</option>
@@ -110,10 +103,10 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
         </select>
       </div>
     </div>
-    <div class="alert" id="err"></div>
+    <div class="alert e" id="err"></div>
     <div class="hint">
-      💡 اضغط الميكروفون واتكلم، وبعدين اضغط تاني لما تخلص.
-      كل رد هيجيلك تحته <b>زمن كل مرحلة بالمللي ثانية</b> عشان تعرف البطء منين.
+      💡 اضغط الميكروفون، اتكلم، وبعدين <b>اضغط تاني</b> لما تخلص.
+      تحت كل رد هتلاقي زمنه بالمللي ثانية.
     </div>
   </div>
 
@@ -134,14 +127,14 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
   <div class="panel pad">
     <label style="margin-bottom:10px">⏱️ متوسط الأزمنة</label>
     <div class="score">
-      <div class="card"><div class="n" id="mBrain">—</div><div class="lb">العقل (فهم + رد)</div></div>
-      <div class="card"><div class="n" id="mVoice">—</div><div class="lb">تجهيز الصوت</div></div>
-      <div class="card"><div class="n" id="mAll">—</div><div class="lb">الإجمالي للرد</div></div>
+      <div class="card"><div class="n" id="mBrain">—</div><div class="lb">العقل</div></div>
+      <div class="card"><div class="n" id="mVoice">—</div><div class="lb">الصوت</div></div>
+      <div class="card"><div class="n" id="mAll">—</div><div class="lb">الإجمالي</div></div>
     </div>
     <div class="hint">
-      <b>المعيار في المكالمات:</b> أقل من <b style="color:#4ade80">١٥٠٠ مللي</b> = طبيعي زي البني آدم ·
-      <b style="color:#fbbf24">١٥٠٠–٣٠٠٠</b> = محسوس بس مقبول ·
-      <b style="color:#f87171">فوق ٣٠٠٠</b> = العميل هيفتكر الخط وقع
+      أقل من <b style="color:#4ade80">١٥٠٠ مللي</b> = طبيعي زي البني آدم ·
+      <b style="color:#fbbf24">١٥٠٠–٣٠٠٠</b> = مقبول ·
+      <b style="color:#f87171">فوق ٣٠٠٠</b> = بطيء
     </div>
   </div>
 </div>
@@ -150,7 +143,7 @@ input:focus,select:focus{outline:none;border-color:var(--b)}
 const $=id=>document.getElementById(id);
 let nextAction=null, times=[], audioEl=null, unlocked=false, busy=false;
 
-/* ═══ الصوت (فتح القفل للموبايل) ═══ */
+/* ═══ فتح قفل الصوت (مطلوب على الموبايل) ═══ */
 function getA(){ if(!audioEl){audioEl=new Audio();audioEl.setAttribute("playsinline","");} return audioEl; }
 function unlock(){
   if(unlocked)return; const a=getA();
@@ -171,9 +164,7 @@ function pcmToWavBytes(pcm,rate){
 function b64(bytes){let s="";const c=8192;
   for(let i=0;i<bytes.length;i+=c)s+=String.fromCharCode.apply(null,bytes.subarray(i,i+c));return btoa(s)}
 
-const ttsCache=new Map();
-
-// صوت الجهاز — سريع جداً، أقرب حاجة لسرعة المكالمة الحقيقية
+/* ═══ النطق ═══ */
 function speakBrowser(text){
   return new Promise(res=>{
     if(!("speechSynthesis" in window)){res();return}
@@ -191,10 +182,10 @@ function speakBrowser(text){
     },60);
   });
 }
-
+const ttsCache=new Map();
 async function speak(text){
   const v=$("voice").value;
-  if(v==="none") return 0;                       // بدون صوت
+  if(v==="none") return 0;
   if(v==="browser"){ const t0=performance.now(); await speakBrowser(text); return performance.now()-t0; }
   const k=$("key").value.trim(); if(k.length<10) return 0;
   const ck=v+"|"+text, t0=performance.now();
@@ -224,28 +215,25 @@ async function speak(text){
   return dt;
 }
 
-/* ═══ التسجيل ═══ */
-/* بنستخدم MediaRecorder — ده الشغّال على الآيفون.
-   ScriptProcessor القديم بيفشل بصمت على iOS. */
+/* ═══ التسجيل — MediaRecorder (شغّال على الآيفون والأندرويد والكمبيوتر) ═══ */
 let stream=null, mr=null, blobs=[], rec=false;
 
 async function startRec(){
+  if(!window.isSecureContext) throw new Error("الصفحة لازم تكون على https");
   if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)
     throw new Error("المتصفح مش بيدعم الميكروفون — استخدم Chrome أو Safari");
-  if(!window.MediaRecorder)
-    throw new Error("المتصفح مش بيدعم التسجيل — حدّث المتصفح");
+  if(!window.MediaRecorder) throw new Error("المتصفح قديم — حدّثه");
   stream=await navigator.mediaDevices.getUserMedia({audio:{
     echoCancellation:true,noiseSuppression:true,autoGainControl:true}});
   let mime="";
   for(const m of ["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/aac"]){
-    if(MediaRecorder.isTypeSupported(m)){mime=m;break}
+    try{ if(MediaRecorder.isTypeSupported(m)){mime=m;break} }catch(e){}
   }
   blobs=[];
   mr = mime ? new MediaRecorder(stream,{mimeType:mime}) : new MediaRecorder(stream);
   mr.ondataavailable=e=>{if(e.data&&e.data.size)blobs.push(e.data)};
   mr.start(200); rec=true;
 }
-
 function stopRec(){
   return new Promise(res=>{
     if(!mr||mr.state==="inactive"){rec=false;res(null);return}
@@ -256,10 +244,8 @@ function stopRec(){
     try{mr.stop()}catch(e){rec=false;res(null)}
   });
 }
-
-// نفك الصوت المضغوط ونطلعه PCM 16k — Gemini بيفهم WAV بس
 async function blobToPcm(blob){
-  if(!blob||!blob.size) throw new Error("مفيش صوت اتسجّل");
+  if(!blob||!blob.size) throw new Error("مفيش صوت اتسجّل — اتأكد إن الميك مسموح");
   const buf=await blob.arrayBuffer();
   const AC=window.AudioContext||window.webkitAudioContext;
   const c=new AC(); let d;
@@ -272,7 +258,7 @@ async function blobToPcm(blob){
   return {bytes:new Uint8Array(p.buffer), secs:L/tr};
 }
 async function transcribe(pcm){
-  const k=$("key").value.trim(); if(k.length<10) throw new Error("محتاج مفتاح Google");
+  const k=$("key").value.trim(); if(k.length<10) throw new Error("محتاج مفتاح Google عشان يسمعك");
   const r=await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key="+encodeURIComponent(k),
     {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({
       contents:[{parts:[
@@ -281,7 +267,7 @@ async function transcribe(pcm){
       generationConfig:{temperature:0,maxOutputTokens:150}})});
   if(!r.ok){const e=await r.json().catch(()=>({}));throw new Error(e.error?.message||("سمع "+r.status))}
   const j=await r.json(),t=(j.candidates?.[0]?.content?.parts?.[0]?.text||"").trim();
-  if(!t||t.includes("لا_يوجد"))throw new Error("مسمعتش كلام واضح");
+  if(!t||t.includes("لا_يوجد"))throw new Error("مسمعتش كلام واضح — قرّب من الميك واتكلم أوضح");
   return t;
 }
 
@@ -289,7 +275,6 @@ async function transcribe(pcm){
 function sayOf(x){const m=x.match(/<Say[^>]*>([\s\S]*?)<\/Say>/);
   return m?m[1].replace(/&apos;/g,"'").replace(/&quot;/g,'"').replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">"):null}
 function actOf(x){const m=x.match(/action="([^"]+)"/);return m?m[1].replace(/&amp;/g,"&"):null}
-
 async function startCall(){
   const b=$("base").value.trim().replace(/\/$/,""), to=$("to").value;
   const r=await fetch(b+"/voice",{method:"POST",body:new URLSearchParams({To:to,From:"+201000000000",CallSid:"CAweb"})});
@@ -312,7 +297,6 @@ function setMic(c,s){$("mz").className="mz "+c;
   $("mic").textContent=c==="rec"?"⏹":(c==="busy"?"⏳":(c==="spk"?"🔊":"🎙"));$("stat").textContent=s}
 function showErr(m){$("err").textContent=m;$("err").className="alert e show"}
 function hideErr(){$("err").className="alert e"}
-
 function stats(){
   if(!times.length)return;
   const avg=a=>Math.round(a.reduce((x,y)=>x+y,0)/a.length);
@@ -321,15 +305,13 @@ function stats(){
   $("mVoice").textContent=v+" ms"; $("mVoice").className="n "+grade(v);
   $("mAll").textContent=a+" ms";   $("mAll").className="n "+grade(a);
 }
-
 async function reset(){
   nextAction=null;times=[];$("chat").innerHTML="";hideErr();
   ["mBrain","mVoice","mAll"].forEach(i=>{$(i).textContent="—";$(i).className="n"});
   setMic("","اضغط وابدأ اتكلم");
-  try{ const g=await startCall(); add("bot",g); await speak(g).catch(()=>{}); }
+  try{ const g=await startCall(); add("bot",g); }
   catch(e){ showErr("مش قادر أوصل للسيرفر: "+e.message); }
 }
-
 async function handle(text){
   if(busy||!text)return; busy=true; $("send").disabled=true;
   add("me",text); $("inp").value="";
@@ -342,16 +324,15 @@ async function handle(text){
     try{ vms=await speak(reply); }catch(e){ showErr("الصوت: "+e.message); }
     times.push({brain:ms,voice:vms}); stats();
     const tm=document.createElement("div");tm.className="timing";
-    tm.innerHTML=`<span>العقل <b class="${grade(ms)}">${Math.round(ms)}ms</b></span>`+
-      (vms?`<span>الصوت <b class="${grade(vms)}">${Math.round(vms)}ms</b></span>`:"")+
-      `<span>الإجمالي <b class="${grade(ms+vms)}">${Math.round(ms+vms)}ms</b></span>`;
+    tm.innerHTML='<span>العقل <b class="'+grade(ms)+'">'+Math.round(ms)+'ms</b></span>'+
+      (vms?'<span>الصوت <b class="'+grade(vms)+'">'+Math.round(vms)+'ms</b></span>':"")+
+      '<span>الإجمالي <b class="'+grade(ms+vms)+'">'+Math.round(ms+vms)+'ms</b></span>';
     el.appendChild(tm);
     if(ended){const d=document.createElement("div");d.className="msg sys";
       d.textContent="— النظام قفل المكالمة —";$("chat").appendChild(d);nextAction=null}
   }catch(e){ showErr(e.message); }
   busy=false;$("send").disabled=false;setMic("","اضغط وابدأ اتكلم");
 }
-
 function send(){ handle($("inp").value.trim()); }
 $("inp").addEventListener("keydown",e=>{if(e.key==="Enter")send()});
 
@@ -362,23 +343,22 @@ async function tap(){
     try{
       const blob=await stopRec();
       const {bytes,secs}=await blobToPcm(blob);
-      if(secs<0.4){setMic("","اضغط وابدأ اتكلم");showErr("التسجيل قصير — اضغط، اتكلم، وبعدين اضغط تاني");return}
+      if(secs<0.4){setMic("","اضغط وابدأ اتكلم");showErr("التسجيل قصير — اضغط، اتكلم شوية، وبعدين اضغط تاني");return}
       const t=await transcribe(bytes);
       await handle(t);
     }catch(e){ showErr("🎙 "+(e.message||e)); setMic("","اضغط وابدأ اتكلم"); }
     return;
   }
   hideErr();
-  try{ await startRec(); setMic("rec","بسجّل… اضغط تاني لما تخلص"); }
+  try{ await startRec(); setMic("rec","🔴 بسجّل… اضغط تاني لما تخلص"); }
   catch(e){
     const n=e.name||"";
-    const m = n==="NotAllowedError" ? "رفضت إذن الميكروفون. دوس على 🔒 جنب الرابط واسمح بالميكروفون، وأعد التحميل."
+    const m = n==="NotAllowedError" ? "رفضت إذن الميكروفون. دوس على القفل 🔒 جنب الرابط ← Microphone ← Allow، وأعد تحميل الصفحة."
       : n==="NotFoundError" ? "مفيش ميكروفون متوصّل بالجهاز."
       : (e.message||"مش قادر أفتح الميكروفون");
     showErr("🎙 "+m);
   }
 }
-
 try{const k=localStorage.getItem("vk");if(k)$("key").value=k}catch(e){}
 $("key").addEventListener("input",()=>{try{localStorage.setItem("vk",$("key").value.trim())}catch(e){}});
 reset();
